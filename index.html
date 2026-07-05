@@ -250,7 +250,57 @@
               </li>
             </ul>
 
+            <!-- Future requirements estimation (only visible when partially filled) -->
+            <div id="future-estimation-panel" style="display: none; margin-top: 1.5rem; padding: 1.25rem; background-color: #ecf5ff; border: 1px solid #dcdfe6; border-radius: 8px; border-left: 4px solid var(--brand-blue);">
+              <h4 style="color: var(--brand-blue); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem; font-size: 1rem; font-weight: 600;">
+                <span>🔮 未來月份業績與台數缺額預估</span>
+              </h4>
+              <p style="font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.75rem;">
+                您目前已填寫了 <strong id="est-filled-months" class="text-primary" style="color: var(--brand-blue);">0</strong> 個月實績，剩餘 <strong id="est-rem-months" class="text-primary" style="color: var(--brand-blue);">0</strong> 個月。若要達到目標，剩餘月份平均每月需達成：
+              </p>
+              
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; min-width: 500px;">
+                  <thead>
+                    <tr style="border-bottom: 2px solid #cbd5e1;">
+                      <th style="padding: 0.5rem 0.2rem; color: var(--navy); font-weight: 600;">預估達成目標</th>
+                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均業績</th>
+                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均新開發</th>
+                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均新機</th>
+                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均業績</th>
+                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均新開發</th>
+                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均新機</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                      <td style="padding: 0.6rem 0.2rem; font-weight: bold; color: var(--brand-blue);">🎯 100% 滿分目標</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-sales">0 萬</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-dev">0 台</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-mach">0 台</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-sales">0 萬</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-dev">0 台</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-mach">0 台</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 0.6rem 0.2rem; font-weight: bold; color: #e11d48;">🛡️ 60分 保級基本線 (均衡型)</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-sales">0 萬</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-dev">0 台</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-mach">0 台</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-sales">0 萬</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-dev">0 台</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-mach">0 台</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <small style="display: block; margin-top: 0.6rem; color: var(--text-muted); font-size: 0.75rem; line-height: 1.4;">
+                * 註：當月只要有輸入任何一個實際數值，即視為該月已填寫；剩餘每月業績若算出來小於 0 則顯示 0 萬；台數皆採無條件進位整數；若為營業主任，小組包含組員與主任目標總加。
+              </small>
+            </div>
+
           </div>
+
         </div>
 
       </div>

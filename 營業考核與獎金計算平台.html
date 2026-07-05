@@ -1222,7 +1222,57 @@
               </li>
             </ul>
 
+            <!-- Future requirements estimation (only visible when partially filled) -->
+            <div id="future-estimation-panel" style="display: none; margin-top: 1.5rem; padding: 1.25rem; background-color: #ecf5ff; border: 1px solid #dcdfe6; border-radius: 8px; border-left: 4px solid var(--brand-blue);">
+              <h4 style="color: var(--brand-blue); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem; font-size: 1rem; font-weight: 600;">
+                <span>🔮 未來月份業績與台數缺額預估</span>
+              </h4>
+              <p style="font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.75rem;">
+                您目前已填寫了 <strong id="est-filled-months" class="text-primary" style="color: var(--brand-blue);">0</strong> 個月實績，剩餘 <strong id="est-rem-months" class="text-primary" style="color: var(--brand-blue);">0</strong> 個月。若要達到目標，剩餘月份平均每月需達成：
+              </p>
+              
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; min-width: 500px;">
+                  <thead>
+                    <tr style="border-bottom: 2px solid #cbd5e1;">
+                      <th style="padding: 0.5rem 0.2rem; color: var(--navy); font-weight: 600;">預估達成目標</th>
+                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均業績</th>
+                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均新開發</th>
+                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均新機</th>
+                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均業績</th>
+                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均新開發</th>
+                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均新機</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                      <td style="padding: 0.6rem 0.2rem; font-weight: bold; color: var(--brand-blue);">🎯 100% 滿分目標</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-sales">0 萬</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-dev">0 台</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-mach">0 台</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-sales">0 萬</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-dev">0 台</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-mach">0 台</td>
+                    </tr>
+                    <tr>
+                      <td style="padding: 0.6rem 0.2rem; font-weight: bold; color: #e11d48;">🛡️ 60分 保級基本線 (均衡型)</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-sales">0 萬</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-dev">0 台</td>
+                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-mach">0 台</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-sales">0 萬</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-dev">0 台</td>
+                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-mach">0 台</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <small style="display: block; margin-top: 0.6rem; color: var(--text-muted); font-size: 0.75rem; line-height: 1.4;">
+                * 註：當月只要有輸入任何一個實際數值，即視為該月已填寫；剩餘每月業績若算出來小於 0 則顯示 0 萬；台數皆採無條件進位整數；若為營業主任，小組包含組員與主任目標總加。
+              </small>
+            </div>
+
           </div>
+
         </div>
 
       </div>
@@ -2066,9 +2116,81 @@
         }
       }
 
+      // ==========================================
+      // 未來月份業績與台數缺額預估 (Gap Estimation)
+      // ==========================================
+      let filledMonthsCount = 0;
+      let activeMonthsFilled = 0;
+      
+      for (let m = 1; m <= monthsCount; m++) {
+        const sInput = document.getElementById(`a-sales-${m}`);
+        const dInput = document.getElementById(`a-dev-${m}`);
+        const mInput = document.getElementById(`a-mach-${m}`);
+        
+        let isMonthFilled = (sInput && sInput.value.trim() !== '') || 
+                             (dInput && dInput.value.trim() !== '') || 
+                             (mInput && mInput.value.trim() !== '');
+                             
+        if (role === 'supervisor') {
+          const gsInput = document.getElementById(`ag-sales-${m}`);
+          const gdInput = document.getElementById(`ag-dev-${m}`);
+          const gmInput = document.getElementById(`ag-mach-${m}`);
+          if ((gsInput && gsInput.value.trim() !== '') || 
+              (gdInput && gdInput.value.trim() !== '') || 
+              (gmInput && gmInput.value.trim() !== '')) {
+            isMonthFilled = true;
+          }
+        }
+        
+        if (isMonthFilled) {
+          filledMonthsCount++;
+          if (!(m === 1 && isFirstMonthZero)) {
+            activeMonthsFilled++;
+          }
+        }
+      }
+
+      const activeMonths = isFirstMonthZero ? monthsCount - 1 : monthsCount;
+      const remActiveMonths = activeMonths - activeMonthsFilled;
+      const estPanel = document.getElementById('future-estimation-panel');
+      
+      if (filledMonthsCount > 0 && remActiveMonths > 0) {
+        estPanel.style.display = 'block';
+        document.getElementById('est-filled-months').textContent = filledMonthsCount;
+        document.getElementById('est-rem-months').textContent = remActiveMonths;
+
+        // 1. 滿分 100% 目標
+        document.getElementById('est-100-s-sales').textContent = Math.max(0, (sumTSales - sumASales) / remActiveMonths).toFixed(1) + ' 萬';
+        document.getElementById('est-100-s-dev').textContent = Math.max(0, Math.ceil((sumTDev - sumADev) / remActiveMonths)) + ' 台';
+        document.getElementById('est-100-s-mach').textContent = Math.max(0, Math.ceil((sumTMach - sumAMach) / remActiveMonths)) + ' 台';
+
+        // 2. 60分保級目標 (均衡型)
+        document.getElementById('est-60-s-sales').textContent = Math.max(0, (sumTSales * 0.8 - sumASales) / remActiveMonths).toFixed(1) + ' 萬';
+        document.getElementById('est-60-s-dev').textContent = Math.max(0, Math.ceil((sumTDev * 0.6 - sumADev) / remActiveMonths)) + ' 台';
+        document.getElementById('est-60-s-mach').textContent = Math.max(0, Math.ceil((sumTMach * 0.6 - sumAMach) / remActiveMonths)) + ' 台';
+
+        if (role === 'supervisor') {
+          document.getElementById('est-100-g-sales').textContent = Math.max(0, (sumTgSales - sumAgSales) / remActiveMonths).toFixed(1) + ' 萬';
+          document.getElementById('est-100-g-dev').textContent = Math.max(0, Math.ceil((sumTgDev - sumAgDev) / remActiveMonths)) + ' 台';
+          document.getElementById('est-100-g-mach').textContent = Math.max(0, Math.ceil((sumTgMach - sumAgMach) / remActiveMonths)) + ' 台';
+
+          document.getElementById('est-60-g-sales').textContent = Math.max(0, (sumTgSales * 0.8 - sumAgSales) / remActiveMonths).toFixed(1) + ' 萬';
+          document.getElementById('est-60-g-dev').textContent = Math.max(0, Math.ceil((sumTgDev * 0.6 - sumAgDev) / remActiveMonths)) + ' 台';
+          document.getElementById('est-60-g-mach').textContent = Math.max(0, Math.ceil((sumTgMach * 0.6 - sumAgMach) / remActiveMonths)) + ' 台';
+        }
+
+        // 控制小組欄位顯示
+        const displayGroup = (role === 'supervisor') ? 'table-cell' : 'none';
+        document.querySelectorAll('.est-group-th').forEach(el => el.style.display = displayGroup);
+        document.querySelectorAll('.est-group-td').forEach(el => el.style.display = displayGroup);
+      } else {
+        estPanel.style.display = 'none';
+      }
+
       document.getElementById('appr-result-card').style.display = 'block';
       document.getElementById('tab-appraisal').classList.add('has-result');
       document.getElementById('appr-result-card').scrollIntoView({ behavior: 'smooth' });
+
       
       saveAppState();
     }

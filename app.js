@@ -757,9 +757,81 @@ function calculateAppraisal() {
     }
   }
 
+  // ==========================================
+  // 未來月份業績與台數缺額預估 (Gap Estimation)
+  // ==========================================
+  let filledMonthsCount = 0;
+  let activeMonthsFilled = 0;
+  
+  for (let m = 1; m <= monthsCount; m++) {
+    const sInput = document.getElementById(`a-sales-${m}`);
+    const dInput = document.getElementById(`a-dev-${m}`);
+    const mInput = document.getElementById(`a-mach-${m}`);
+    
+    let isMonthFilled = (sInput && sInput.value.trim() !== '') || 
+                         (dInput && dInput.value.trim() !== '') || 
+                         (mInput && mInput.value.trim() !== '');
+                         
+    if (role === 'supervisor') {
+      const gsInput = document.getElementById(`ag-sales-${m}`);
+      const gdInput = document.getElementById(`ag-dev-${m}`);
+      const gmInput = document.getElementById(`ag-mach-${m}`);
+      if ((gsInput && gsInput.value.trim() !== '') || 
+          (gdInput && gdInput.value.trim() !== '') || 
+          (gmInput && gmInput.value.trim() !== '')) {
+        isMonthFilled = true;
+      }
+    }
+    
+    if (isMonthFilled) {
+      filledMonthsCount++;
+      if (!(m === 1 && isFirstMonthZero)) {
+        activeMonthsFilled++;
+      }
+    }
+  }
+
+  const activeMonths = isFirstMonthZero ? monthsCount - 1 : monthsCount;
+  const remActiveMonths = activeMonths - activeMonthsFilled;
+  const estPanel = document.getElementById('future-estimation-panel');
+  
+  if (filledMonthsCount > 0 && remActiveMonths > 0) {
+    estPanel.style.display = 'block';
+    document.getElementById('est-filled-months').textContent = filledMonthsCount;
+    document.getElementById('est-rem-months').textContent = remActiveMonths;
+
+    // 1. 滿分 100% 目標
+    document.getElementById('est-100-s-sales').textContent = Math.max(0, (sumTSales - sumASales) / remActiveMonths).toFixed(1) + ' 萬';
+    document.getElementById('est-100-s-dev').textContent = Math.max(0, Math.ceil((sumTDev - sumADev) / remActiveMonths)) + ' 台';
+    document.getElementById('est-100-s-mach').textContent = Math.max(0, Math.ceil((sumTMach - sumAMach) / remActiveMonths)) + ' 台';
+
+    // 2. 60分保級目標 (均衡型)
+    document.getElementById('est-60-s-sales').textContent = Math.max(0, (sumTSales * 0.8 - sumASales) / remActiveMonths).toFixed(1) + ' 萬';
+    document.getElementById('est-60-s-dev').textContent = Math.max(0, Math.ceil((sumTDev * 0.6 - sumADev) / remActiveMonths)) + ' 台';
+    document.getElementById('est-60-s-mach').textContent = Math.max(0, Math.ceil((sumTMach * 0.6 - sumAMach) / remActiveMonths)) + ' 台';
+
+    if (role === 'supervisor') {
+      document.getElementById('est-100-g-sales').textContent = Math.max(0, (sumTgSales - sumAgSales) / remActiveMonths).toFixed(1) + ' 萬';
+      document.getElementById('est-100-g-dev').textContent = Math.max(0, Math.ceil((sumTgDev - sumAgDev) / remActiveMonths)) + ' 台';
+      document.getElementById('est-100-g-mach').textContent = Math.max(0, Math.ceil((sumTgMach - sumAgMach) / remActiveMonths)) + ' 台';
+
+      document.getElementById('est-60-g-sales').textContent = Math.max(0, (sumTgSales * 0.8 - sumAgSales) / remActiveMonths).toFixed(1) + ' 萬';
+      document.getElementById('est-60-g-dev').textContent = Math.max(0, Math.ceil((sumTgDev * 0.6 - sumAgDev) / remActiveMonths)) + ' 台';
+      document.getElementById('est-60-g-mach').textContent = Math.max(0, Math.ceil((sumTgMach * 0.6 - sumAgMach) / remActiveMonths)) + ' 台';
+    }
+
+    // 控制小組欄位顯示
+    const displayGroup = (role === 'supervisor') ? 'table-cell' : 'none';
+    document.querySelectorAll('.est-group-th').forEach(el => el.style.display = displayGroup);
+    document.querySelectorAll('.est-group-td').forEach(el => el.style.display = displayGroup);
+  } else {
+    estPanel.style.display = 'none';
+  }
+
   // 顯現結果卡片
   document.getElementById('appr-result-card').style.display = 'block';
   document.getElementById('tab-appraisal').classList.add('has-result');
+
 
   // 滾動到結果畫面
   document.getElementById('appr-result-card').scrollIntoView({ behavior: 'smooth' });
