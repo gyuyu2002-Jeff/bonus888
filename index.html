@@ -160,6 +160,15 @@
               <button class="btn btn-secondary" onclick="resetAppraisalForm()">重設輸入</button>
               <button class="btn btn-primary" onclick="calculateAppraisal()">開始計算考核</button>
             </div>
+
+            <!-- Backup and Auto-save status -->
+            <div class="data-management-bar" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="exportDataToFile()" style="background-color: #67c23a; color: white; border-color: #67c23a;">💾 匯出備份檔 (.json)</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="triggerImportFile()" style="background-color: #e6a23c; color: white; border-color: #e6a23c;">📂 匯入備份檔</button>
+              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
+              <span id="save-status-msg" style="font-size: 0.85rem; color: #67c23a; margin-left: auto; align-self: center; font-weight: bold; display: none;">✓ 已自動存檔</span>
+            </div>
+
           </div>
         </div>
 

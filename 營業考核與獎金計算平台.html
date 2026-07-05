@@ -1058,6 +1058,15 @@
               <button class="btn btn-secondary" onclick="resetAppraisalForm()">重設輸入</button>
               <button class="btn btn-primary" onclick="calculateAppraisal()">開始計算考核</button>
             </div>
+
+            <!-- Backup and Auto-save status -->
+            <div class="data-management-bar" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <button type="button" class="btn btn-secondary btn-sm" onclick="exportDataToFile()" style="background-color: #67c23a; color: white; border-color: #67c23a;">💾 匯出備份檔 (.json)</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="triggerImportFile()" style="background-color: #e6a23c; color: white; border-color: #e6a23c;">📂 匯入備份檔</button>
+              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
+              <span id="save-status-msg" style="font-size: 0.85rem; color: #67c23a; margin-left: auto; align-self: center; font-weight: bold; display: none;">✓ 已自動存檔</span>
+            </div>
+
           </div>
         </div>
 
@@ -1324,13 +1333,26 @@
       // 初始化分頁顯示
       switchTab('appraisal');
       
-      // 初始化考核設定與預設表格
-      onAppraisalConfigChange();
+      // 嘗試從本地載入存檔，若無存檔則執行預設初始化
+      const hasSavedState = loadAppState();
+      if (!hasSavedState) {
+        onAppraisalConfigChange();
+      }
+
+      // 監聽實際值輸入，實時計算並自動存檔
+      const tbody = document.getElementById('appr-input-tbody');
+      if (tbody) {
+        tbody.addEventListener('input', () => {
+          calculateAppraisal();
+          showSaveStatus();
+        });
+      }
       
       // 成交獎金預設新增一列
       addOutrightRow();
       addRentalRow();
     };
+
 
     // ==========================================
     // 3. 通用功能: 分頁切換
@@ -1399,7 +1421,9 @@
 
       // 4. 重繪逐月輸入表格
       renderInputTable();
+      saveAppState();
     }
+
 
 
     // 根據考評目的獲取月數
@@ -1981,7 +2005,10 @@
       document.getElementById('appr-result-card').style.display = 'block';
       document.getElementById('tab-appraisal').classList.add('has-result');
       document.getElementById('appr-result-card').scrollIntoView({ behavior: 'smooth' });
+      
+      saveAppState();
     }
+
 
     // --- 賣斷獎金處理 ---
     function addOutrightRow() {
@@ -2261,7 +2288,222 @@
 
       calculateAppraisal();
     }
+
+    // ==========================================
+    // 8. 本地資料存檔與備份匯入/匯出 (Local Storage & Backup Tool)
+    // ==========================================
+
+    // 收集目前的應用程式狀態
+    function collectAppState() {
+      const channel = document.getElementById('appr-channel').value;
+      const role = document.getElementById('appr-role').value;
+      const level = document.getElementById('appr-level').value;
+      const mode = document.getElementById('appr-mode').value;
+      const probationFirstMonthZero = document.getElementById('probation-first-month-zero') ? document.getElementById('probation-first-month-zero').checked : false;
+      
+      const monthsCount = getEvaluationMonths();
+      const actuals = {
+        personal: {},
+        group: {}
+      };
+
+      for (let m = 1; m <= monthsCount; m++) {
+        const sInput = document.getElementById(`a-sales-${m}`);
+        const dInput = document.getElementById(`a-dev-${m}`);
+        const mInput = document.getElementById(`a-mach-${m}`);
+
+        actuals.personal[m] = {
+          sales: sInput ? sInput.value : '',
+          dev: dInput ? dInput.value : '',
+          mach: mInput ? mInput.value : ''
+        };
+
+        if (role === 'supervisor') {
+          const gsInput = document.getElementById(`ag-sales-${m}`);
+          const gdInput = document.getElementById(`ag-dev-${m}`);
+          const gmInput = document.getElementById(`ag-mach-${m}`);
+          
+          actuals.group[m] = {
+            sales: gsInput ? gsInput.value : '',
+            dev: gdInput ? gdInput.value : '',
+            mach: gmInput ? gmInput.value : ''
+          };
+        }
+      }
+
+      return {
+        channel,
+        role,
+        level,
+        mode,
+        probationFirstMonthZero,
+        teamMembers,
+        actuals
+      };
+    }
+
+    // 儲存狀態至 LocalStorage
+    function saveAppState() {
+      try {
+        const state = collectAppState();
+        localStorage.setItem('huxen_appraisal_state', JSON.stringify(state));
+      } catch (e) {
+        console.error('Failed to save state:', e);
+      }
+    }
+
+    // 顯示已自動存檔狀態提示
+    let saveStatusTimeout;
+    function showSaveStatus() {
+      const msgSpan = document.getElementById('save-status-msg');
+      if (!msgSpan) return;
+      msgSpan.style.display = 'inline';
+      clearTimeout(saveStatusTimeout);
+      saveStatusTimeout = setTimeout(() => {
+        msgSpan.style.display = 'none';
+      }, 1500);
+    }
+
+    // 從 LocalStorage 載入狀態
+    function loadAppState() {
+      try {
+        const stateStr = localStorage.getItem('huxen_appraisal_state');
+        if (!stateStr) return false;
+        
+        const state = JSON.parse(stateStr);
+        
+        // 1. 還原設定值
+        document.getElementById('appr-channel').value = state.channel;
+        document.getElementById('appr-role').value = state.role;
+        
+        // 還原主任組員編制
+        if (state.teamMembers) {
+          teamMembers = state.teamMembers;
+          // 獲取最大 ID 作為計數器基準
+          memberIdCounter = teamMembers.reduce((max, m) => Math.max(max, m.id), 0);
+        }
+        
+        // 重建職級選單以防選取不對
+        const levelSelect = document.getElementById('appr-level');
+        levelSelect.innerHTML = '';
+        const levels = Object.keys(TARGETS_DB[state.channel][state.role]);
+        levels.forEach(lvl => {
+          const opt = document.createElement('option');
+          opt.value = lvl;
+          opt.textContent = `職級 ${lvl}`;
+          levelSelect.appendChild(opt);
+        });
+        levelSelect.value = state.level;
+
+        document.getElementById('appr-mode').value = state.mode;
+        
+        const probationCheckbox = document.getElementById('probation-first-month-zero');
+        if (probationCheckbox) {
+          probationCheckbox.checked = state.probationFirstMonthZero;
+        }
+        
+        // 切換顯示組員設定與試用期選項
+        const teamConfigWrap = document.getElementById('supervisor-team-config-wrap');
+        if (state.role === 'supervisor') {
+          teamConfigWrap.style.display = 'block';
+          renderTeamMembersList();
+        } else {
+          teamConfigWrap.style.display = 'none';
+        }
+        
+        const probationWrap = document.getElementById('probation-special-wrap');
+        if (state.mode === 'probation') {
+          probationWrap.style.display = 'block';
+        } else {
+          probationWrap.style.display = 'none';
+        }
+
+        // 2. 繪製輸入表格
+        renderInputTable();
+        
+        // 3. 填入實際值
+        const monthsCount = getEvaluationMonths();
+        for (let m = 1; m <= monthsCount; m++) {
+          const pData = state.actuals.personal[m];
+          if (pData) {
+            if (document.getElementById(`a-sales-${m}`)) document.getElementById(`a-sales-${m}`).value = pData.sales;
+            if (document.getElementById(`a-dev-${m}`)) document.getElementById(`a-dev-${m}`).value = pData.dev;
+            if (document.getElementById(`a-mach-${m}`)) document.getElementById(`a-mach-${m}`).value = pData.mach;
+          }
+          
+          if (state.role === 'supervisor') {
+            const gData = state.actuals.group[m];
+            if (gData) {
+              if (document.getElementById(`ag-sales-${m}`)) document.getElementById(`ag-sales-${m}`).value = gData.sales;
+              if (document.getElementById(`ag-dev-${m}`)) document.getElementById(`ag-dev-${m}`).value = gData.dev;
+              if (document.getElementById(`ag-mach-${m}`)) document.getElementById(`ag-mach-${m}`).value = gData.mach;
+            }
+          }
+        }
+        
+        // 4. 重新計算一次
+        calculateAppraisal();
+        return true;
+      } catch (e) {
+        console.error('Failed to load state:', e);
+        return false;
+      }
+    }
+
+    // 匯出 JSON 備份檔
+    function exportDataToFile() {
+      try {
+        const state = collectAppState();
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(state, null, 2));
+        const downloadAnchor = document.createElement('a');
+        downloadAnchor.setAttribute("href", dataStr);
+        
+        // 命名格式: huxen_appraisal_OA_supervisor_2026-07-05.json
+        const dateStr = new Date().toISOString().split('T')[0];
+        const filename = `huxen_appraisal_${state.channel}_${state.role}_lvl${state.level}_${dateStr}.json`;
+        downloadAnchor.setAttribute("download", filename);
+        
+        document.body.appendChild(downloadAnchor);
+        downloadAnchor.click();
+        downloadAnchor.remove();
+      } catch (e) {
+        alert('匯出失敗，請確認輸入欄位是否正確。');
+      }
+    }
+
+    // 點擊隱藏的上傳 input
+    function triggerImportFile() {
+      document.getElementById('import-file-input').click();
+    }
+
+    // 讀取 JSON 並匯入
+    function importDataFromFile(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const state = JSON.parse(e.target.result);
+          // 先存入 localStorage
+          localStorage.setItem('huxen_appraisal_state', JSON.stringify(state));
+          // 載入
+          const success = loadAppState();
+          if (success) {
+            alert('🎉 資料匯入成功！');
+          } else {
+            alert('匯入失敗，檔案格式不正確。');
+          }
+        } catch (err) {
+          alert('解析檔案失敗，請上傳正確的 .json 格式檔案。');
+        }
+        // 重設 input
+        event.target.value = '';
+      };
+      reader.readAsText(file);
+    }
   </script>
+
 
 </body>
 </html>
