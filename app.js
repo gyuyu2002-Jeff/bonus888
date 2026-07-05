@@ -87,14 +87,25 @@ window.onload = function() {
 // ==========================================
 function switchTab(tabId) {
   currentTab = tabId;
-  document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-  document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
+  
+  // 1. 切換按鈕的 active 狀態 (避免 querySelector 單雙引號解析出錯)
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    const onclickStr = btn.getAttribute('onclick') || '';
+    if (onclickStr.includes(tabId)) {
+      btn.classList.add('active');
+    } else {
+      btn.classList.remove('active');
+    }
+  });
 
-  const activeBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`);
-  if (activeBtn) activeBtn.classList.add('active');
-
-  const activeSec = document.getElementById(`tab-${tabId}`);
-  if (activeSec) activeSec.classList.add('active');
+  // 2. 切換分頁內容區的 active 狀態
+  document.querySelectorAll('.tab-section').forEach(sec => {
+    if (sec.id === `tab-${tabId}`) {
+      sec.classList.add('active');
+    } else {
+      sec.classList.remove('active');
+    }
+  });
 }
 
 
