@@ -1037,7 +1037,11 @@
     <button class="tab-btn" onclick="switchTab('commission')">
       <span class="tab-icon">💰</span> 成交獎金估算系統
     </button>
+    <button class="tab-btn" onclick="switchTab('guide')">
+      <span class="tab-icon">📖</span> 使用說明與規則手冊
+    </button>
   </nav>
+
 
   <main class="app-content">
     
@@ -1389,10 +1393,141 @@
           </div>
         </div>
 
+    <!-- Tab 3: Guide & Manual -->
+    <section id="tab-guide" class="tab-section">
+      <div class="card guide-card" style="max-width: 1000px; margin: 0 auto; margin-bottom: 2rem;">
+        <div class="card-header bg-navy text-white">
+          <h3>📖 互盛營業同仁待遇與考核平台 使用說明書</h3>
+        </div>
+        <div class="card-body" style="padding: 2rem; line-height: 1.7; color: var(--text-dark);">
+          
+          <!-- Section 1: Overview -->
+          <div style="margin-bottom: 2.5rem;">
+            <h4 style="color: var(--brand-blue); border-left: 4px solid var(--brand-blue); padding-left: 0.6rem; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.8rem;">
+              🎯 平台設計宗旨
+            </h4>
+            <p style="font-size: 0.95rem;">
+              本計算平台專為<strong>互盛（HUXEN）營業同仁與主管</strong>設計，旨在簡化每半年一次的營業考核試算以及日常成交獎金的估算。透過整合複雜的級距評分表、保級合格門檻與租機定額費率，提供一鍵式的判定與回饋，協助同仁提早規劃業績並掌握薪酬權益。
+            </p>
+          </div>
+
+          <!-- Section 2: Step-by-Step Guide -->
+          <div style="margin-bottom: 2.5rem;">
+            <h4 style="color: var(--brand-blue); border-left: 4px solid var(--brand-blue); padding-left: 0.6rem; font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">
+              🚀 系統使用五步驟
+            </h4>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem;">
+              
+              <div class="note-box info-note" style="margin: 0; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--brand-blue);">
+                <strong style="color: var(--brand-blue); display: block; margin-bottom: 0.4rem; font-size: 0.95rem; font-weight: 700;">1. 身分與考評設定</strong>
+                選擇您的「事業部類別」（OA / CA）、「職務身分」（營業同仁 / 主任）與「職級」，並根據考評目的設定評核類型。
+              </div>
+
+              <div class="note-box info-note" style="margin: 0; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--brand-blue);">
+                <strong style="color: var(--brand-blue); display: block; margin-bottom: 0.4rem; font-size: 0.95rem; font-weight: 700;">2. 確認保級門檻</strong>
+                設定身分後，左方「保級免遭調降合格門檻」卡片會即時呈現出該職級在此考核期內對應的三大保級方案的個人與團隊業績要求。
+              </div>
+
+              <div class="note-box info-note" style="margin: 0; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--brand-blue);">
+                <strong style="color: var(--brand-blue); display: block; margin-bottom: 0.4rem; font-size: 0.95rem; font-weight: 700;">3. 逐月輸入實際實績</strong>
+                在表格中填寫您每個月的「實際」值。上方的「目標」值會自動帶出。輸入時系統會於背景**自動存檔**，且畫面不會跳動。
+              </div>
+
+              <div class="note-box info-note" style="margin: 0; padding: 1rem; border-radius: 8px; border-left: 4px solid var(--brand-blue);">
+                <strong style="color: var(--brand-blue); display: block; margin-bottom: 0.4rem; font-size: 0.95rem; font-weight: 700;">4. 一鍵計算判定與預估</strong>
+                輸入完畢後點擊「開始計算考核」。系統將呈現總分與合格檢核，若填寫未滿期，還會顯示**「未來月份業績台數預估」**。
+              </div>
+
+            </div>
+          </div>
+
+          <!-- Section 3: Performance Criteria -->
+          <div style="margin-bottom: 2.5rem;">
+            <h4 style="color: var(--brand-blue); border-left: 4px solid var(--brand-blue); padding-left: 0.6rem; font-size: 1.15rem; font-weight: 700; margin-bottom: 1rem;">
+              📊 績效考核計分標準與權重
+            </h4>
+            
+            <div style="background: #f8fafc; padding: 1.25rem; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 1.25rem;">
+              <strong style="color: var(--navy); display: block; margin-bottom: 0.5rem; font-size: 0.95rem;">⚖️ 權重分配公式：</strong>
+              <ul style="margin-left: 1.25rem; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.4rem; list-style-type: disc;">
+                <li><strong>個人指標權重</strong>：業績達成率 (配分 40%)、新開發台數達成率 (配分 40%)、新機台數達成率 (配分 20%)。</li>
+                <li><strong>職務身分權重</strong>：
+                  <ul style="margin-left: 1.25rem; list-style-type: circle; margin-top: 0.25rem;">
+                    <li><strong>營業同仁</strong>：總考核分數 = 個人指標得分。</li>
+                    <li><strong>營業主任</strong>：總考核分數 = 個人得分 * 70% + 小組得分 * 30%。(註：小組目標與實際為全組組員之加總)</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+
+            <div style="overflow-x: auto;">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center; min-width: 600px; border: 1px solid var(--border-color);">
+                <thead>
+                  <tr style="background-color: var(--navy); color: white; font-weight: bold;">
+                    <th style="padding: 0.6rem;">達成率區間</th>
+                    <th style="padding: 0.6rem;">指標一：業績得分 (配分 40)</th>
+                    <th style="padding: 0.6rem;">指標二：新開發得分 (配分 40)</th>
+                    <th style="padding: 0.6rem;">指標三：新機得分 (配分 20)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 0.6rem; font-weight: bold;">超額達成 (110%~120%+)</td>
+                    <td style="padding: 0.6rem; color: var(--brand-blue); font-weight: bold;">40 分 (達成率 &ge; 110%)</td>
+                    <td style="padding: 0.6rem; color: var(--brand-blue); font-weight: bold;">40 分 (達成率 &ge; 120%)</td>
+                    <td style="padding: 0.6rem; color: var(--brand-blue); font-weight: bold;">20 分 (達成率 &ge; 120%)</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f8fafc;">
+                    <td style="padding: 0.6rem; font-weight: bold;">100% 完美達成</td>
+                    <td style="padding: 0.6rem;">35 分</td>
+                    <td style="padding: 0.6rem;">35 分</td>
+                    <td style="padding: 0.6rem;">18 分</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 0.6rem; font-weight: bold;">80% ~ 90% 區間</td>
+                    <td style="padding: 0.6rem;">30 分 (90%) / 25 分 (80%)</td>
+                    <td style="padding: 0.6rem;">30 分 (80%)</td>
+                    <td style="padding: 0.6rem;">16 分 (80%)</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #e2e8f0; background-color: #f8fafc;">
+                    <td style="padding: 0.6rem; font-weight: bold;">60% ~ 70% 區間</td>
+                    <td style="padding: 0.6rem; color: #e11d48;">20 分 (未達 80%)</td>
+                    <td style="padding: 0.6rem;">25 分 (60%)</td>
+                    <td style="padding: 0.6rem;">14 分 (60%)</td>
+                  </tr>
+                  <tr style="border-bottom: 1px solid #e2e8f0;">
+                    <td style="padding: 0.6rem; font-weight: bold;">未達 60% 門檻</td>
+                    <td style="padding: 0.6rem; color: #e11d48; font-weight: bold;">20 分 (未達 80% 皆為最低得分)</td>
+                    <td style="padding: 0.6rem; color: #e11d48; font-weight: bold;">20 分 (未達 60%)</td>
+                    <td style="padding: 0.6rem; color: #e11d48; font-weight: bold;">12 分 (未達 60%)</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Section 4: Backup Policies -->
+          <div style="margin-bottom: 1.5rem;">
+            <h4 style="color: var(--brand-blue); border-left: 4px solid var(--brand-blue); padding-left: 0.6rem; font-size: 1.15rem; font-weight: 700; margin-bottom: 0.8rem;">
+              💾 資料備份、還原與隱私安全
+            </h4>
+            <p style="font-size: 0.95rem; margin-bottom: 0.6rem;">
+              為了最大化便利性與資料安全，平台採用以下備份機制：
+            </p>
+            <ul style="margin-left: 1.25rem; font-size: 0.9rem; display: flex; flex-direction: column; gap: 0.4rem; list-style-type: disc;">
+              <li><strong>瀏覽器自動存檔</strong>：只要您輸入 any 資料，系統便會自動將其保存在您的本機瀏覽器（LocalStorage）中。即使您關閉瀏覽器或重新整理，資料也不會遺失。</li>
+              <li><strong>JSON 檔案備份與還原</strong>：點擊「匯出備份」即可將目前輸入的所有考評與獎金數據下載為一個備份檔案（.json）。下次使用時點選「匯入備份」即可完美復原。</li>
+              <li><strong>完美支援檔案改名</strong>：為了方便檔案管理，您可以自由更改匯出的備份檔案名稱（例如改為 `2026-07_Jeff特考.json`），系統在匯入時依然能夠完美解析資料。</li>
+              <li><strong>100% 隱私保護</strong>：本系統為純前端應用程式，所有計算與存檔皆在您自己的電腦瀏覽器中完成，**絕不會上傳任何個資或業績數據至任何外部伺服器**，請放心使用。</li>
+            </ul>
+          </div>
+
+        </div>
       </div>
     </section>
 
   </main>
+
 
 
   <!-- Footer -->
@@ -1498,14 +1633,13 @@
       document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
 
-      if (tabId === 'appraisal') {
-        document.querySelector('.tab-btn[onclick="switchTab(\'appraisal\')"]').classList.add('active');
-        document.getElementById('tab-appraisal').classList.add('active');
-      } else {
-        document.querySelector('.tab-btn[onclick="switchTab(\'commission\')"]').classList.add('active');
-        document.getElementById('tab-commission').classList.add('active');
-      }
+      const activeBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+
+      const activeSec = document.getElementById(`tab-${tabId}`);
+      if (activeSec) activeSec.classList.add('active');
     }
+
 
     // ==========================================
     // 4. 績效考核模組 (Appraisal Module)

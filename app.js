@@ -90,14 +90,13 @@ function switchTab(tabId) {
   document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
   document.querySelectorAll('.tab-section').forEach(sec => sec.classList.remove('active'));
 
-  if (tabId === 'appraisal') {
-    document.querySelector('.tab-btn[onclick="switchTab(\'appraisal\')"]').classList.add('active');
-    document.getElementById('tab-appraisal').classList.add('active');
-  } else {
-    document.querySelector('.tab-btn[onclick="switchTab(\'commission\')"]').classList.add('active');
-    document.getElementById('tab-commission').classList.add('active');
-  }
+  const activeBtn = document.querySelector(`.tab-btn[onclick="switchTab('${tabId}')"]`);
+  if (activeBtn) activeBtn.classList.add('active');
+
+  const activeSec = document.getElementById(`tab-${tabId}`);
+  if (activeSec) activeSec.classList.add('active');
 }
+
 
 // ==========================================
 // 4. 績效考核模組 (Appraisal Module)
