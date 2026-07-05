@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>互盛 HUXEN | 營業同仁成交獎金與績效考核計算平台</title>
+  <!-- Google Fonts: Roboto & Noto Sans TC -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <!-- Vanilla CSS Stylesheet -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="app-header">
+    <div class="header-container">
+      <div class="brand">
+        <!-- Aurora / Huxen Red & Blue Styled Logo -->
+        <span class="logo-huxen">互盛</span>
+        <span class="logo-group">HUXEN</span>
+        <span class="logo-divider">|</span>
+        <span class="logo-title">營業待遇與考核計算平台</span>
+      </div>
+    </div>
+  </header>
+
+
+  <!-- Navigation Tabs -->
+  <nav class="app-tabs">
+    <button class="tab-btn active" onclick="switchTab('appraisal')">
+      <span class="tab-icon">📊</span> 績效考核與合格判定
+    </button>
+    <button class="tab-btn" onclick="switchTab('commission')">
+      <span class="tab-icon">💰</span> 成交獎金估算系統
+    </button>
+  </nav>
+
+  <main class="app-content">
+    
+    <!-- Tab 1: Performance Appraisal -->
+    <section id="tab-appraisal" class="tab-section active">
+      <div class="grid-container">
+        
+        <!-- Left Panel Container (Stacks multiple cards) -->
+        <div class="left-panel">
+          <!-- Card 1: Configuration -->
+          <div class="card config-card">
+            <div class="card-header">
+              <h3><span class="header-num">1</span> 考評對象與身分設定</h3>
+            </div>
+            <div class="card-body">
+              <!-- Channel / Role -->
+              <div class="form-group">
+                <label for="appr-channel">事業部類別</label>
+                <select id="appr-channel" onchange="onAppraisalConfigChange()">
+                  <option value="OA">OA 直銷</option>
+                  <option value="CA">CA 直銷</option>
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label for="appr-role">職務身分</label>
+                <select id="appr-role" onchange="onAppraisalConfigChange()">
+                  <option value="sales">營業同仁</option>
+                  <option value="supervisor">營業主任</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label for="appr-level">目前職級</label>
+                <select id="appr-level" onchange="onAppraisalConfigChange()">
+                  <!-- Dynamic based on role -->
+                </select>
+              </div>
+
+              <hr class="divider">
+
+              <!-- Evaluation Mode -->
+              <div class="form-group">
+                <label for="appr-mode">考評評核類型</label>
+                <select id="appr-mode" onchange="onAppraisalConfigChange()">
+                  <option value="standard-6m">標準半年度考核 (近半年/6個月) [整合晉升與調降]</option>
+                  <option value="promotion-sup">同仁晉升主任 (近三個月/3個月)</option>
+                  <option value="probation">新員試用期評核 (近三個月/3個月)</option>
+                </select>
+              </div>
+
+              <!-- Probation special checkbox -->
+              <div class="form-group checkbox-group" id="probation-special-wrap" style="display: none;">
+                <input type="checkbox" id="probation-first-month-zero" onchange="onAppraisalConfigChange()" checked>
+                <label for="probation-first-month-zero">
+                  <strong>首月不設目標</strong><br>
+                  <small class="text-muted">(試用期第一個月目標不計，達成率由第2個月起累計)</small>
+                </label>
+              </div>
+
+              <div class="note-box alert-note">
+                <h4>💡 考核說明</h4>
+                <p><strong>營業主任</strong>考核以「個人佔 70%，整組佔 30%」計算。綜合考評達 <strong>80分</strong> 以上判定晉升，低於 <strong>60分</strong> 則面臨調降職級。</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Passing Condition Reference (Avoid Demotion) -->
+          <div class="card ref-card mt-3">
+            <div class="card-header bg-navy text-white">
+              <h3>📋 保級免遭調降合格門檻</h3>
+            </div>
+            <div class="card-body" id="pass-conditions-content">
+              <!-- Dynamically populated by JS -->
+            </div>
+          </div>
+        </div>
+
+
+        <!-- Middle input panel -->
+        <div class="card input-card">
+          <div class="card-header">
+            <h3><span class="header-num">2</span> 逐月實績輸入</h3>
+            <span class="badge" id="month-count-badge">6 個月</span>
+          </div>
+          <div class="card-body">
+            <span class="mobile-scroll-tip">👈 手機版可左右滑動表格輸入實績 👉</span>
+            <div class="scroll-wrapper">
+              <table class="input-table" id="appr-input-table">
+                <thead>
+                  <tr id="table-header-row">
+                    <!-- Dynamic Headers -->
+                  </tr>
+                </thead>
+                <tbody id="appr-input-tbody">
+                  <!-- Dynamic Input Rows -->
+                </tbody>
+              </table>
+            </div>
+
+            <div class="action-bar">
+              <button class="btn btn-secondary" onclick="resetAppraisalForm()">重設輸入</button>
+              <button class="btn btn-primary" onclick="calculateAppraisal()">開始計算考核</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right / Bottom appraisal result panel -->
+        <div class="card result-card" id="appr-result-card" style="display: none;">
+          <div class="card-header bg-navy text-white">
+            <h3><span class="header-num">3</span> 考評判定結果</h3>
+          </div>
+          <div class="card-body">
+            <!-- Score dashboard -->
+            <div class="score-dashboard">
+              <div class="score-circle">
+                <span class="score-val" id="res-total-score">0</span>
+                <span class="score-lbl">綜合考核得分</span>
+              </div>
+              <div class="decision-panel">
+                <div class="decision-title">考評判定結果</div>
+                <div class="decision-badge" id="res-decision-badge">--</div>
+                <div class="decision-desc" id="res-decision-desc"></div>
+              </div>
+            </div>
+
+            <!-- Score breakdown detail -->
+            <h4 class="section-title">指標得分明細</h4>
+            <div class="metric-breakdown">
+              
+              <!-- Metric 1 -->
+              <div class="metric-item">
+                <div class="metric-info">
+                  <span class="metric-name">1. 業績達成率 (配分 40%)</span>
+                  <span class="metric-score" id="res-m1-score">0 / 40 分</span>
+                </div>
+                <div class="metric-progress-container">
+                  <div class="metric-progress-bar bg-blue" id="res-m1-progress" style="width: 0%"></div>
+                </div>
+                <div class="metric-details">
+                  目標累計: <span id="res-m1-target">0</span> 萬 | 實際累計: <span id="res-m1-actual">0</span> 萬 (達成率: <span id="res-m1-rate">0%</span>)
+                </div>
+              </div>
+
+              <!-- Metric 2 -->
+              <div class="metric-item">
+                <div class="metric-info">
+                  <span class="metric-name" id="res-m2-name">2. MFP新開發台數達成率 (配分 40%)</span>
+                  <span class="metric-score" id="res-m2-score">0 / 40 分</span>
+                </div>
+                <div class="metric-progress-container">
+                  <div class="metric-progress-bar bg-orange" id="res-m2-progress" style="width: 0%"></div>
+                </div>
+                <div class="metric-details">
+                  目標累計: <span id="res-m2-target">0</span> 台 | 實際累計: <span id="res-m2-actual">0</span> 台 (達成率: <span id="res-m2-rate">0%</span>)
+                </div>
+              </div>
+
+              <!-- Metric 3 -->
+              <div class="metric-item">
+                <div class="metric-info">
+                  <span class="metric-name" id="res-m3-name">3. MFP新機台數達成率 (配分 20%)</span>
+                  <span class="metric-score" id="res-m3-score">0 / 20 分</span>
+                </div>
+                <div class="metric-progress-container">
+                  <div class="metric-progress-bar bg-red" id="res-m3-progress" style="width: 0%"></div>
+                </div>
+                <div class="metric-details">
+                  目標累計: <span id="res-m3-target">0</span> 台 | 實際累計: <span id="res-m3-actual">0</span> 台 (達成率: <span id="res-m3-rate">0%</span>)
+                </div>
+              </div>
+
+            </div>
+
+            <!-- Weighted Breakdown (for supervisor) -->
+            <div id="supervisor-weight-panel" class="note-box info-note" style="display: none;">
+              <h4>👥 營業主任小組加權明細</h4>
+              <p>個人考評分數: <strong id="res-personal-score">0</strong> 分 (權重 70% = <span id="res-personal-weighted">0</span> 分)</p>
+              <p>小組考評分數: <strong id="res-group-score">0</strong> 分 (權重 30% = <span id="res-group-weighted">0</span> 分)</p>
+              <p class="small text-muted">* 小組目標與實際為各月份組員(含主任)總和。</p>
+            </div>
+
+            <!-- Minimum Condition Checklist -->
+            <h4 class="section-title">合格條件檢核</h4>
+            <ul class="checklist">
+              <li id="chk-score-80">
+                <span class="chk-icon"></span> 晉升標準: 近期分數達 80 分以上 (現狀: <span id="chk-score-80-val">0</span> 分)
+              </li>
+              <li id="chk-score-60">
+                <span class="chk-icon"></span> 降級警示: 分數低於 60 分將面臨降級 (現狀: <span id="chk-score-60-val">0</span> 分)
+              </li>
+              <li id="chk-probation-pass" style="display: none;">
+                <span class="chk-icon"></span> 試用正式任用: 分數達 80 分以上 (現狀: <span id="chk-prob-score-val">0</span> 分)
+              </li>
+            </ul>
+
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Tab 2: Commission Calculator -->
+    <section id="tab-commission" class="tab-section">
+      <div class="grid-container">
+        
+        <!-- Outright Sale Commission Card -->
+        <div class="card outright-card">
+          <div class="card-header bg-blue text-white">
+            <h3>賣斷獎金估算 (單筆實績 x 獎金比率)</h3>
+          </div>
+          <div class="card-body">
+            <div class="scroll-wrapper">
+              <table class="item-table" id="outright-table">
+                <thead>
+                  <tr>
+                    <th>交易編號</th>
+                    <th>單筆實績 (元)</th>
+                    <th>基本獎金比率 (%)</th>
+                    <th>新開發顧客另加發比率 (%)</th>
+                    <th>實績小計 (元)</th>
+                    <th>小計獎金 (元)</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="outright-tbody">
+                  <!-- Row items inserted dynamically -->
+                </tbody>
+              </table>
+            </div>
+            <button class="btn btn-secondary mt-3" onclick="addOutrightRow()">＋ 新增賣斷交易</button>
+          </div>
+        </div>
+
+        <!-- Rental Commission Card -->
+        <div class="card rental-card">
+          <div class="card-header bg-orange text-white">
+            <h3>租機獎金估算 (現有/新開發顧客定額機型獎金)</h3>
+          </div>
+          <div class="card-body">
+            <div class="scroll-wrapper">
+              <table class="item-table" id="rental-table">
+                <thead>
+                  <tr>
+                    <th>交易編號</th>
+                    <th>機型類別</th>
+                    <th>速度與規格</th>
+                    <th>顧客開發類型</th>
+                    <th>租期條件</th>
+                    <th>數量 (台)</th>
+                    <th>單台定額獎金 (元)</th>
+                    <th>小計獎金 (元)</th>
+                    <th>操作</th>
+                  </tr>
+                </thead>
+                <tbody id="rental-tbody">
+                  <!-- Row items inserted dynamically -->
+                </tbody>
+              </table>
+            </div>
+            <div class="rental-actions">
+              <button class="btn btn-secondary mt-3" onclick="addRentalRow()">＋ 新增租機交易</button>
+              <div class="note-box alert-note mt-3">
+                <small>⚠️ <strong>備註事項</strong>：大批採購 10 台(含)以上或特殊交易由主管個案核定；租期未達 36 期者，獎金將減半折算。</small>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Total Commission Dashboard -->
+        <div class="card total-card">
+          <div class="card-header bg-red text-white">
+            <h3>🏆 佣金與獎金總計結果</h3>
+          </div>
+          <div class="card-body text-center">
+            <div class="total-commission-box">
+              <div class="total-title">預估同仁成交總獎金</div>
+              <div class="total-amount-display">NT$ <span id="com-total-amount">0</span></div>
+            </div>
+            <hr class="divider">
+            <div class="commission-breakdown-summary">
+              <p>賣斷交易總數: <strong id="com-outright-count">0</strong> 筆 | 賣斷獎金累計: NT$ <strong id="com-outright-total">0</strong></p>
+              <p>租機交易台數: <strong id="com-rental-qty">0</strong> 台 | 租機獎金累計: NT$ <strong id="com-rental-total">0</strong></p>
+            </div>
+            <div class="action-bar-center mt-4">
+              <button class="btn btn-secondary mr-2" onclick="resetCommissionForm()">全部重設</button>
+              <button class="btn btn-primary" onclick="calculateCommission()">計算總成交獎金</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="app-footer-bar">
+    <div class="footer-container">
+      <p>本平台僅供內部試算參考，實際待遇與考評結果依事業部權責主管核定之公文為準</p>
+      <p class="small text-muted">如成果有誤，個人恕不負責 by antigravity</p>
+    </div>
+  </footer>
+
+
+  <!-- Vanilla JS Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
