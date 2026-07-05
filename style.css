@@ -988,6 +988,30 @@ body {
   margin-top: 1rem;
 }
 
+.cell-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+
+.target-lbl {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.actual-input {
+  width: 75px !important;
+  text-align: right;
+  font-size: 0.85rem !important;
+  padding: 0.35rem 0.5rem !important;
+  border-radius: 6px !important;
+  background-color: #f8fafc !important;
+}
+
+
 
 
 

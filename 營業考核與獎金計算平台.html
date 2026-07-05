@@ -982,7 +982,31 @@
       gap: 0.3rem;
       margin-top: 1rem;
     }
+
+    .cell-stack {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .target-lbl {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .actual-input {
+      width: 75px !important;
+      text-align: right;
+      font-size: 0.85rem !important;
+      padding: 0.35rem 0.5rem !important;
+      border-radius: 6px !important;
+      background-color: #f8fafc !important;
+    }
   </style>
+
 
 
 </head>
@@ -1574,17 +1598,17 @@
 
       // 組裝表頭 HTML
       let headerHtml = `
-        <th>月份</th>
-        <th>個人業績 (萬元)<br><span class="th-sub">目標 / 實際</span></th>
-        <th>個人 ${col2Name}<br><span class="th-sub">目標 / 實際</span></th>
-        <th>個人 ${col3Name}<br><span class="th-sub">目標 / 實際</span></th>
+        <th style="padding: 0.4rem 0.6rem; text-align: center;">月份</th>
+        <th style="padding: 0.4rem 0.6rem; text-align: center;">個人業績 (萬)</th>
+        <th style="padding: 0.4rem 0.6rem; text-align: center;">個人 ${col2Name}</th>
+        <th style="padding: 0.4rem 0.6rem; text-align: center;">個人 ${col3Name}</th>
       `;
 
       if (role === 'supervisor') {
         headerHtml += `
-          <th>小組總業績 (萬元)<br><span class="th-sub">目標 / 實際</span></th>
-          <th>小組 ${col2Name}<br><span class="th-sub">目標 / 實際</span></th>
-          <th>小組 ${col3Name}<br><span class="th-sub">目標 / 實際</span></th>
+          <th style="padding: 0.4rem 0.6rem; text-align: center;">小組業績 (萬)</th>
+          <th style="padding: 0.4rem 0.6rem; text-align: center;">小組 ${col2Name}</th>
+          <th style="padding: 0.4rem 0.6rem; text-align: center;">小組 ${col3Name}</th>
         `;
       }
       headerRow.innerHTML = headerHtml;
@@ -1594,12 +1618,12 @@
       for (let m = 1; m <= monthsCount; m++) {
         const isFirstMonth = (m === 1 && isFirstMonthZero);
         
-        // 首月不設目標時，目標值寫為0且唯讀；否則帶入資料庫預設
+        // 首月不設目標時，目標值寫為0；否則帶入資料庫預設
         const tSales = isFirstMonth ? 0 : targets.sales;
         const tNewDev = isFirstMonth ? 0 : targets.newDev;
         const tNewMach = isFirstMonth ? 0 : targets.newMach;
 
-        // 小組目標預設值 (營業組各員(含主任)目標總和，超編依實有，缺編依編制；缺編個員以職級一目標計算)
+        // 小組目標預設值 (營業組各員(含主任)目標總和)
         let tgSales = isFirstMonth ? 0 : targets.sales;
         let tgNewDev = isFirstMonth ? 0 : targets.newDev;
         let tgNewMach = isFirstMonth ? 0 : targets.newMach;
@@ -1615,38 +1639,53 @@
           });
         }
 
-
-        const readOnlyAttr = isFirstMonth ? 'readonly class="read-only-target"' : '';
-
         let rowHtml = `
-          <td>第 ${m} 個月${isFirstMonth ? '<br><small class="text-danger">(首月免計)</small>' : ''}</td>
-          <td>
-            <input type="number" step="any" id="t-sales-${m}" value="${tSales}" ${readOnlyAttr}> /
-            <input type="number" step="any" id="a-sales-${m}" value="" placeholder="實際">
+          <td style="padding: 0.4rem 0.6rem; text-align: center; font-size: 0.85rem;">第 ${m} 月${isFirstMonth ? '<br><small class="text-danger" style="font-size: 0.75rem;">(免計)</small>' : ''}</td>
+          <td style="padding: 0.4rem 0.6rem;">
+            <div class="cell-stack">
+              <span class="target-lbl">目標: ${tSales}</span>
+              <input type="hidden" id="t-sales-${m}" value="${tSales}">
+              <input type="number" step="any" id="a-sales-${m}" value="" placeholder="實際" class="actual-input">
+            </div>
           </td>
-          <td>
-            <input type="number" id="t-dev-${m}" value="${tNewDev}" ${readOnlyAttr}> /
-            <input type="number" id="a-dev-${m}" value="" placeholder="實際">
+          <td style="padding: 0.4rem 0.6rem;">
+            <div class="cell-stack">
+              <span class="target-lbl">目標: ${tNewDev}</span>
+              <input type="hidden" id="t-dev-${m}" value="${tNewDev}">
+              <input type="number" id="a-dev-${m}" value="" placeholder="實際" class="actual-input">
+            </div>
           </td>
-          <td>
-            <input type="number" id="t-mach-${m}" value="${tNewMach}" ${readOnlyAttr}> /
-            <input type="number" id="a-mach-${m}" value="" placeholder="實際">
+          <td style="padding: 0.4rem 0.6rem;">
+            <div class="cell-stack">
+              <span class="target-lbl">目標: ${tNewMach}</span>
+              <input type="hidden" id="t-mach-${m}" value="${tNewMach}">
+              <input type="number" id="a-mach-${m}" value="" placeholder="實際" class="actual-input">
+            </div>
           </td>
         `;
 
         if (role === 'supervisor') {
           rowHtml += `
-            <td>
-              <input type="number" step="any" id="tg-sales-${m}" value="${tgSales}" ${readOnlyAttr}> /
-              <input type="number" step="any" id="ag-sales-${m}" value="" placeholder="實際">
+            <td style="padding: 0.4rem 0.6rem;">
+              <div class="cell-stack">
+                <span class="target-lbl">目標: ${tgSales}</span>
+                <input type="hidden" id="tg-sales-${m}" value="${tgSales}">
+                <input type="number" step="any" id="ag-sales-${m}" value="" placeholder="實際" class="actual-input">
+              </div>
             </td>
-            <td>
-              <input type="number" id="tg-dev-${m}" value="${tgNewDev}" ${readOnlyAttr}> /
-              <input type="number" id="ag-dev-${m}" value="" placeholder="實際">
+            <td style="padding: 0.4rem 0.6rem;">
+              <div class="cell-stack">
+                <span class="target-lbl">目標: ${tgNewDev}</span>
+                <input type="hidden" id="tg-dev-${m}" value="${tgNewDev}">
+                <input type="number" id="ag-dev-${m}" value="" placeholder="實際" class="actual-input">
+              </div>
             </td>
-            <td>
-              <input type="number" id="tg-mach-${m}" value="${tgNewMach}" ${readOnlyAttr}> /
-              <input type="number" id="ag-mach-${m}" value="" placeholder="實際">
+            <td style="padding: 0.4rem 0.6rem;">
+              <div class="cell-stack">
+                <span class="target-lbl">目標: ${tgNewMach}</span>
+                <input type="hidden" id="tg-mach-${m}" value="${tgNewMach}">
+                <input type="number" id="ag-mach-${m}" value="" placeholder="實際" class="actual-input">
+              </div>
             </td>
           `;
         }
@@ -1658,6 +1697,7 @@
       }
       updatePassConditions();
     }
+
 
     // 動態更新保級與免遭調降的條件
     function updatePassConditions() {
