@@ -1503,68 +1503,148 @@
       const targets = TARGETS_DB[channel][role][level];
       if (!targets) return;
 
-      // 計算期間內的加總目標
+      // 計算期間內的個人加總目標
       const tSales = targets.sales * activeMonths;
       const tDev = targets.newDev * activeMonths;
       const tMach = targets.newMach * activeMonths;
+
+      // 計算期間內的小組加總目標
+      let gMonthlySales = targets.sales;
+      let gMonthlyDev = targets.newDev;
+      let gMonthlyMach = targets.newMach;
+
+      if (role === 'supervisor') {
+        teamMembers.forEach(member => {
+          const mTargets = TARGETS_DB[channel]['sales'][member.level];
+          if (mTargets) {
+            gMonthlySales += mTargets.sales;
+            gMonthlyDev += mTargets.newDev;
+            gMonthlyMach += mTargets.newMach;
+          }
+        });
+      }
+      const tgSales = gMonthlySales * activeMonths;
+      const tgDev = gMonthlyDev * activeMonths;
+      const tgMach = gMonthlyMach * activeMonths;
 
       const m2Name = channel === 'OA' ? 'MFP新開發台數' : '交換機銷售台數';
       const m3Name = channel === 'OA' ? 'MFP新機台數' : 'MFP銷售台數(新+舊)';
 
       // 方案一：業績主攻 (業績達成率達 90%，得分 30 + 20 + 12 = 62)
       const s1Sales = (tSales * 0.9).toFixed(1);
+      const g1Sales = (tgSales * 0.9).toFixed(1);
       
       // 方案二：台數主攻 (項目二達成率 80%，得分 30；項目三達成率 60%，得分 14；總分 20 + 30 + 14 = 64)
       const s2Dev = Math.ceil(tDev * 0.8);
       const s2Mach = Math.ceil(tMach * 0.6);
+      const g2Dev = Math.ceil(tgDev * 0.8);
+      const g2Mach = Math.ceil(tgMach * 0.6);
 
       // 方案三：均衡達成 (業績 80% 得25分；項目二 60% 得25分；項目三 60% 得14分；總分 25 + 25 + 14 = 64)
       const s3Sales = (tSales * 0.8).toFixed(1);
       const s3Dev = Math.ceil(tDev * 0.6);
       const s3Mach = Math.ceil(tMach * 0.6);
+      const g3Sales = (tgSales * 0.8).toFixed(1);
+      const g3Dev = Math.ceil(tgDev * 0.6);
+      const g3Mach = Math.ceil(tgMach * 0.6);
 
       let html = `
         <div class="ref-period-desc">
           評核期間：${monthsCount} 個月 ${isFirstMonthZero ? '(首月免計目標，實計 2 個月)' : ''}
         </div>
         <ul class="ref-target-list">
-          <li><span>累計業績總目標:</span> <strong>${tSales.toFixed(1)} 萬元</strong></li>
-          <li><span>累計 ${m2Name} 目標:</span> <strong>${tDev} 台</strong></li>
-          <li><span>累計 ${m3Name} 目標:</span> <strong>${tMach} 台</strong></li>
+          <li><span>個人業績累計總目標:</span> <strong>${tSales.toFixed(1)} 萬元</strong></li>
+          <li><span>個人 ${m2Name} 累計:</span> <strong>${tDev} 台</strong></li>
+          <li><span>個人 ${m3Name} 累計:</span> <strong>${tMach} 台</strong></li>
+      `;
+
+      if (role === 'supervisor') {
+        html += `
+          <hr style="margin: 0.5rem 0; border: none; border-top: 1px dashed var(--border-color);">
+          <li><span>小組業績累計總目標:</span> <strong>${tgSales.toFixed(1)} 萬元</strong></li>
+          <li><span>小組 ${m2Name} 累計:</span> <strong>${tgDev} 台</strong></li>
+          <li><span>小組 ${m3Name} 累計:</span> <strong>${tgMach} 台</strong></li>
+        `;
+      }
+
+      html += `
         </ul>
         
         <h4 class="ref-note" style="font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; font-size: 0.9rem;">💡 保級最低門檻方案 (達 60 分免遭調降) :</h4>
-        
-        <div class="ref-scheme-card sales-focus">
-          <div class="ref-scheme-title">
-            <span>方案一：業績主攻型</span>
-            <span class="badge bg-blue">62分保級</span>
-          </div>
-          <div class="ref-scheme-desc">
-            累計業績實績達 <strong>${s1Sales} 萬元</strong> (達成率 90%，得30分)。此時縱使新開發與新機台數均低於標準，總分仍有 62 分安全保級。
-          </div>
-        </div>
-
-        <div class="ref-scheme-card qty-focus">
-          <div class="ref-scheme-title">
-            <span>方案二：台數主攻型</span>
-            <span class="badge bg-orange">64分保級</span>
-          </div>
-          <div class="ref-scheme-desc">
-            累計 ${m2Name} 達 <strong>${s2Dev} 台</strong> (80%，得30分) 且 ${m3Name} 達 <strong>${s2Mach} 台</strong> (60%，得14分)。此時縱使業績低於 80%，總分仍有 64 分安全保級。
-          </div>
-        </div>
-
-        <div class="ref-scheme-card balanced-focus">
-          <div class="ref-scheme-title">
-            <span>方案三：均衡達成型</span>
-            <span class="badge bg-red">64分保級</span>
-          </div>
-          <div class="ref-scheme-desc">
-            累計業績達 <strong>${s3Sales} 萬元</strong> (80%，得25分)，且 ${m2Name} 達 <strong>${s3Dev} 台</strong> (60%，得25分)，且 ${m3Name} 達 <strong>${s3Mach} 台</strong> (60%，得14分)，總分 64 分保級。
-          </div>
-        </div>
       `;
+
+      if (role === 'supervisor') {
+        html += `
+          <div class="ref-scheme-card sales-focus">
+            <div class="ref-scheme-title">
+              <span>方案一：業績主攻型</span>
+              <span class="badge bg-blue">62分保級</span>
+            </div>
+            <div class="ref-scheme-desc" style="line-height: 1.6;">
+              • <strong>個人</strong>：累計業績達 <strong>${s1Sales} 萬元</strong> (達成率 90%)<br>
+              • <strong>小組</strong>：累計業績達 <strong>${g1Sales} 萬元</strong> (達成率 90%)<br>
+              <small class="text-muted">此時縱使新開發與新機台數均低於標準，總分仍有 62 分安全保級。</small>
+            </div>
+          </div>
+
+          <div class="ref-scheme-card qty-focus">
+            <div class="ref-scheme-title">
+              <span>方案二：台數主攻型</span>
+              <span class="badge bg-orange">64分保級</span>
+            </div>
+            <div class="ref-scheme-desc" style="line-height: 1.6;">
+              • <strong>個人</strong>：累計 ${m2Name} 達 <strong>${s2Dev} 台</strong> 且 ${m3Name} 達 <strong>${s2Mach} 台</strong><br>
+              • <strong>小組</strong>：累計 ${m2Name} 達 <strong>${g2Dev} 台</strong> 且 ${m3Name} 達 <strong>${g2Mach} 台</strong><br>
+              <small class="text-muted">此時縱使業績低於 80%，總分仍有 64 分安全保級。</small>
+            </div>
+          </div>
+
+          <div class="ref-scheme-card balanced-focus">
+            <div class="ref-scheme-title">
+              <span>方案三：均衡達成型</span>
+              <span class="badge bg-red">64分保級</span>
+            </div>
+            <div class="ref-scheme-desc" style="line-height: 1.6;">
+              • <strong>個人</strong>：業績 <strong>${s3Sales} 萬</strong>、${m2Name} <strong>${s3Dev} 台</strong>、${m3Name} <strong>${s3Mach} 台</strong><br>
+              • <strong>小組</strong>：業績 <strong>${g3Sales} 萬</strong>、${m2Name} <strong>${g3Dev} 台</strong>、${m3Name} <strong>${g3Mach} 台</strong><br>
+              <small class="text-muted">個人與小組指標均達均衡標準，以 64 分保級。</small>
+            </div>
+          </div>
+        `;
+      } else {
+        html += `
+          <div class="ref-scheme-card sales-focus">
+            <div class="ref-scheme-title">
+              <span>方案一：業績主攻型</span>
+              <span class="badge bg-blue">62分保級</span>
+            </div>
+            <div class="ref-scheme-desc">
+              累計業績實績達 <strong>${s1Sales} 萬元</strong> (達成率 90%，得30分)。此時縱使新開發與新機台數均低於標準，總分仍有 62 分安全保級。
+            </div>
+          </div>
+
+          <div class="ref-scheme-card qty-focus">
+            <div class="ref-scheme-title">
+              <span>方案二：台數主攻型</span>
+              <span class="badge bg-orange">64分保級</span>
+            </div>
+            <div class="ref-scheme-desc">
+              累計 ${m2Name} 達 <strong>${s2Dev} 台</strong> (80%，得30分) 且 ${m3Name} 達 <strong>${s2Mach} 台</strong> (60%，得14分)。此時縱使業績低於 80%，總分仍有 64 分安全保級。
+            </div>
+          </div>
+
+          <div class="ref-scheme-card balanced-focus">
+            <div class="ref-scheme-title">
+              <span>方案三：均衡達成型</span>
+              <span class="badge bg-red">64分保級</span>
+            </div>
+            <div class="ref-scheme-desc">
+              累計業績達 <strong>${s3Sales} 萬元</strong> (80%，得25分)，且 ${m2Name} 達 <strong>${s3Dev} 台</strong> (60%，得25分)，且 ${m3Name} 達 <strong>${s3Mach} 台</strong> (60%，得14分)，總分 64 分保級。
+            </div>
+          </div>
+        `;
+      }
+
 
       if (role === 'supervisor') {
         html += `
