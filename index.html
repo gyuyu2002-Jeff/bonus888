@@ -149,10 +149,14 @@
             </div>
 
             <div class="action-bar" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-              <button class="btn btn-secondary" onclick="resetAppraisalForm()">重設輸入</button>
               <button class="btn btn-primary" onclick="calculateAppraisal()">開始計算考核</button>
+              <button class="btn btn-secondary" onclick="resetAppraisalForm()">重設輸入</button>
+              <button type="button" class="btn btn-backup-export" onclick="exportDataToFile()">💾 匯出備份</button>
+              <button type="button" class="btn btn-backup-import" onclick="triggerImportFile()">📂 匯入備份</button>
+              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
               <span id="save-status-msg" style="font-size: 0.85rem; color: #10b981; margin-left: 1rem; align-self: center; font-weight: bold; display: none;">✓ 已自動存檔</span>
             </div>
+
           </div>
         </div>
 
@@ -343,26 +347,6 @@
 
       </div>
     </section>
-
-    <!-- Local Data Backup & Restore Card -->
-    <div class="data-backup-card">
-      <div class="backup-title">📋 本地資料備份與還原</div>
-      <div class="backup-desc">您可以將目前的試算進度與編制設定下載備份至電腦，或在下個月上傳舊備份檔以還原進度。</div>
-      <div class="backup-buttons-group">
-        <button type="button" class="btn btn-backup btn-backup-export" onclick="exportDataToFile()">
-          <svg viewBox="0 0 24 24"><path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/></svg>
-          💾 匯出備份資料 (.json)
-        </button>
-        <button type="button" class="btn btn-backup btn-backup-import" onclick="triggerImportFile()">
-          <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
-          📂 匯入備份資料
-        </button>
-        <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
-      </div>
-      <div class="backup-status-text" id="backup-status-msg">
-        <span>✓ 資料已成功同步</span>
-      </div>
-    </div>
 
   </main>
 
