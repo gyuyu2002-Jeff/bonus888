@@ -75,7 +75,17 @@
                 </select>
               </div>
 
+              <!-- Supervisor Team Members Config (Only visible when role is supervisor) -->
+              <div id="supervisor-team-config-wrap" style="display: none; margin-top: 1.25rem;">
+                <label style="display: block; font-weight: 700; margin-bottom: 0.5rem; color: var(--navy); font-size: 0.95rem;">營業組員編制設定</label>
+                <div id="team-members-list" style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.75rem;">
+                  <!-- Dynamic Member Rows -->
+                </div>
+                <button type="button" class="btn btn-secondary" onclick="addTeamMember()" style="padding: 0.35rem 0.75rem; font-size: 0.85rem; width: 100%;">＋ 新增組員 / 缺編</button>
+              </div>
+
               <hr class="divider">
+
 
               <!-- Evaluation Mode -->
               <div class="form-group">

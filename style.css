@@ -849,3 +849,46 @@ body {
   }
 }
 
+/* Supervisor Team Composition CSS */
+.team-member-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #f8fafc;
+  padding: 0.4rem 0.6rem;
+  border-radius: 4px;
+  border: 1px solid var(--border-color);
+}
+
+.team-member-row span {
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--navy);
+  white-space: nowrap;
+}
+
+.team-member-row select {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.85rem !important;
+  height: auto !important;
+  width: auto !important;
+  flex: 1;
+}
+
+.btn-delete-member {
+  background: transparent;
+  border: none;
+  color: var(--brand-red);
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 1.1rem;
+  padding: 0 0.25rem;
+  line-height: 1;
+  transition: color 0.2s;
+}
+
+.btn-delete-member:hover {
+  color: var(--brand-red-hover);
+}
+
+

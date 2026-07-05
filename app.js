@@ -50,6 +50,9 @@ const RENTAL_RATES = {
 let currentTab = 'appraisal';
 let outrightCounter = 0;
 let rentalCounter = 0;
+let teamMembers = [{ id: 1, level: 1 }, { id: 2, level: 1 }]; // 預設 2 位組員，職級皆為 1
+let memberIdCounter = 2;
+
 
 // ==========================================
 // 2. 系統啟動初始化
@@ -122,9 +125,19 @@ function onAppraisalConfigChange() {
     probationWrap.style.display = 'none';
   }
 
-  // 3. 重繪逐月輸入表格
+  // 3. 營業主任編制卡片顯示切換
+  const teamConfigWrap = document.getElementById('supervisor-team-config-wrap');
+  if (role === 'supervisor') {
+    teamConfigWrap.style.display = 'block';
+    renderTeamMembersList();
+  } else {
+    teamConfigWrap.style.display = 'none';
+  }
+
+  // 4. 重繪逐月輸入表格
   renderInputTable();
 }
+
 
 // 根據考評目的獲取月數
 function getEvaluationMonths() {
@@ -185,10 +198,22 @@ function renderInputTable() {
     const tNewDev = isFirstMonth ? 0 : targets.newDev;
     const tNewMach = isFirstMonth ? 0 : targets.newMach;
 
-    // 小組目標預設值 (給予一個主管目標 * 2 的預設，可編輯)
-    const tgSales = isFirstMonth ? 0 : targets.sales * 2;
-    const tgNewDev = isFirstMonth ? 0 : targets.newDev * 2;
-    const tgNewMach = isFirstMonth ? 0 : targets.newMach * 2;
+    // 小組目標預設值 (營業組各員(含主任)目標總和，超編依實有，缺編依編制；缺編個員以職級一目標計算)
+    let tgSales = isFirstMonth ? 0 : targets.sales;
+    let tgNewDev = isFirstMonth ? 0 : targets.newDev;
+    let tgNewMach = isFirstMonth ? 0 : targets.newMach;
+
+    if (role === 'supervisor' && !isFirstMonth) {
+      teamMembers.forEach(member => {
+        const mTargets = TARGETS_DB[channel]['sales'][member.level];
+        if (mTargets) {
+          tgSales += mTargets.sales;
+          tgNewDev += mTargets.newDev;
+          tgNewMach += mTargets.newMach;
+        }
+      });
+    }
+
 
     const readOnlyAttr = isFirstMonth ? 'readonly class="read-only-target"' : '';
 
@@ -330,6 +355,54 @@ function updatePassConditions() {
 
   document.getElementById('pass-conditions-content').innerHTML = html;
 }
+
+// 新增小組組員
+function addTeamMember() {
+  memberIdCounter++;
+  teamMembers.push({ id: memberIdCounter, level: 1 });
+  renderTeamMembersList();
+  renderInputTable();
+}
+
+// 移除小組組員
+function removeTeamMember(id) {
+  teamMembers = teamMembers.filter(m => m.id !== id);
+  renderTeamMembersList();
+  renderInputTable();
+}
+
+// 變更個別組員職級
+function onMemberLevelChange(id, newLevel) {
+  const member = teamMembers.find(m => m.id === id);
+  if (member) {
+    member.level = parseInt(newLevel);
+  }
+  renderInputTable();
+}
+
+// 渲染小組組員選單清單
+function renderTeamMembersList() {
+  const listDiv = document.getElementById('team-members-list');
+  if (!listDiv) return;
+  listDiv.innerHTML = '';
+  
+  teamMembers.forEach((member, index) => {
+    const row = document.createElement('div');
+    row.className = 'team-member-row';
+    row.innerHTML = `
+      <span>組員 ${index + 1}:</span>
+      <select onchange="onMemberLevelChange(${member.id}, this.value)">
+        <option value="1" ${member.level === 1 ? 'selected' : ''}>職級 1</option>
+        <option value="2" ${member.level === 2 ? 'selected' : ''}>職級 2</option>
+        <option value="3" ${member.level === 3 ? 'selected' : ''}>職級 3</option>
+        <option value="4" ${member.level === 4 ? 'selected' : ''}>職級 4</option>
+      </select>
+      <button type="button" class="btn-delete-member" onclick="removeTeamMember(${member.id})">×</button>
+    `;
+    listDiv.appendChild(row);
+  });
+}
+
 
 
 // 重設考評表單
