@@ -130,13 +130,7 @@ function onAppraisalConfigChange() {
 
   // 2. 根據考評目的設定預設統計月數
   const mode = document.getElementById('appr-mode').value;
-  const probationWrap = document.getElementById('probation-special-wrap');
-  
-  if (mode === 'probation') {
-    probationWrap.style.display = 'block';
-  } else {
-    probationWrap.style.display = 'none';
-  }
+
 
   // 3. 營業主任編制卡片顯示切換
   const teamConfigWrap = document.getElementById('supervisor-team-config-wrap');
@@ -170,7 +164,7 @@ function renderInputTable() {
   const level = document.getElementById('appr-level').value;
   const mode = document.getElementById('appr-mode').value;
   const isProbation = (mode === 'probation');
-  const isFirstMonthZero = isProbation && document.getElementById('probation-first-month-zero').checked;
+  const isFirstMonthZero = false;
   const monthsCount = getEvaluationMonths();
   
   // 更新徽章數字
@@ -296,7 +290,7 @@ function updatePassConditions() {
   const level = document.getElementById('appr-level').value;
   const mode = document.getElementById('appr-mode').value;
   const isProbation = (mode === 'probation');
-  const isFirstMonthZero = isProbation && document.getElementById('probation-first-month-zero').checked;
+  const isFirstMonthZero = false;
   
   let monthsCount = getEvaluationMonths();
   let activeMonths = monthsCount;
@@ -561,7 +555,7 @@ function calculateAppraisal() {
   const role = document.getElementById('appr-role').value;
   const mode = document.getElementById('appr-mode').value;
   const isProbation = (mode === 'probation');
-  const isFirstMonthZero = isProbation && document.getElementById('probation-first-month-zero').checked;
+  const isFirstMonthZero = false;
   const monthsCount = getEvaluationMonths();
 
   // 累加變數 (個人)
@@ -1181,7 +1175,7 @@ function collectAppState() {
   const role = document.getElementById('appr-role').value;
   const level = document.getElementById('appr-level').value;
   const mode = document.getElementById('appr-mode').value;
-  const probationFirstMonthZero = document.getElementById('probation-first-month-zero') ? document.getElementById('probation-first-month-zero').checked : false;
+  const probationFirstMonthZero = false;
   
   const monthsCount = getEvaluationMonths();
   const actuals = {
@@ -1293,12 +1287,7 @@ function loadAppState() {
       teamConfigWrap.style.display = 'none';
     }
     
-    const probationWrap = document.getElementById('probation-special-wrap');
-    if (state.mode === 'probation') {
-      probationWrap.style.display = 'block';
-    } else {
-      probationWrap.style.display = 'none';
-    }
+
 
     // 2. 繪製輸入表格
     renderInputTable();
