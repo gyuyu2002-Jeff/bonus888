@@ -4,10 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>互盛 HUXEN | 營業同仁成交獎金與績效考核計算平台</title>
-  <!-- Google Fonts: Roboto & Noto Sans TC -->
+  <!-- Google Fonts: Outfit & Noto Sans TC -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
+
   <!-- Vanilla CSS Stylesheet -->
   <link rel="stylesheet" href="style.css">
 </head>
@@ -147,21 +148,14 @@
               </table>
             </div>
 
-            <div class="action-bar">
+            <div class="action-bar" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
               <button class="btn btn-secondary" onclick="resetAppraisalForm()">重設輸入</button>
               <button class="btn btn-primary" onclick="calculateAppraisal()">開始計算考核</button>
+              <span id="save-status-msg" style="font-size: 0.85rem; color: #10b981; margin-left: 1rem; align-self: center; font-weight: bold; display: none;">✓ 已自動存檔</span>
             </div>
-
-            <!-- Backup and Auto-save status -->
-            <div class="data-management-bar" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="exportDataToFile()" style="background-color: #67c23a; color: white; border-color: #67c23a;">💾 匯出備份檔 (.json)</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="triggerImportFile()" style="background-color: #e6a23c; color: white; border-color: #e6a23c;">📂 匯入備份檔</button>
-              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
-              <span id="save-status-msg" style="font-size: 0.85rem; color: #67c23a; margin-left: auto; align-self: center; font-weight: bold; display: none;">✓ 已自動存檔</span>
-            </div>
-
           </div>
         </div>
+
 
         <!-- Right / Bottom appraisal result panel -->
         <div class="card result-card" id="appr-result-card" style="display: none;">
@@ -350,7 +344,28 @@
       </div>
     </section>
 
+    <!-- Local Data Backup & Restore Card -->
+    <div class="data-backup-card">
+      <div class="backup-title">📋 本地資料備份與還原</div>
+      <div class="backup-desc">您可以將目前的試算進度與編制設定下載備份至電腦，或在下個月上傳舊備份檔以還原進度。</div>
+      <div class="backup-buttons-group">
+        <button type="button" class="btn btn-backup btn-backup-export" onclick="exportDataToFile()">
+          <svg viewBox="0 0 24 24"><path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/></svg>
+          💾 匯出備份資料 (.json)
+        </button>
+        <button type="button" class="btn btn-backup btn-backup-import" onclick="triggerImportFile()">
+          <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+          📂 匯入備份資料
+        </button>
+        <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
+      </div>
+      <div class="backup-status-text" id="backup-status-msg">
+        <span>✓ 資料已成功同步</span>
+      </div>
+    </div>
+
   </main>
+
 
   <!-- Footer -->
   <footer class="app-footer-bar">

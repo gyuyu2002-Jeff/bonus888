@@ -4,31 +4,31 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>互盛 HUXEN | 營業同仁成交獎金與績效考核計算平台</title>
-  <!-- Google Fonts: Roboto & Noto Sans TC -->
+  <!-- Google Fonts: Outfit & Noto Sans TC -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Roboto:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
   
   <style>
     /* Style System based on https://www.eosasc.com.tw/ (Huxen / Aurora style) */
 
     :root {
       --brand-blue: #0047bb;      /* 互盛皇家藍 */
-      --brand-red: #e60012;       /* 震旦經典紅 */
-      --brand-red-hover: #b8000e;
+      --brand-red: #f56c6c;       /* 震旦經典紅 (改為更柔和的高雅紅) */
+      --brand-red-hover: #dd6161;
       --brand-blue-hover: #003691;
       --navy: #0e2b5c;            /* 深海軍藍 */
-      --bg-color: #f7f9fc;        /* 淺灰背景 */
+      --bg-color: #f8fafc;        /* 淺藍灰背景，增加呼吸感與高級感 */
       --card-bg: #ffffff;
-      --text-dark: #333333;       /* 深灰文字 */
-      --text-muted: #7f8c8d;      /* 輔助文字 */
-      --border-color: #dcdfe6;    /* 外框灰色 */
-      --border-radius: 8px;       /* 圓角 */
+      --text-dark: #2d3748;       /* 柔和深色字 */
+      --text-muted: #718096;      /* 輔助文字 */
+      --border-color: #e2e8f0;    /* 淺色細框線 */
+      --border-radius: 12px;      /* 增加圓角到 12px 使其更柔和 */
       
-      --success: #27ae60;
-      --warning: #f39c12;
-      --danger: #c0392b;
-      --info: #2980b9;
+      --success: #67c23a;         /* 更優雅的綠色 */
+      --warning: #e6a23c;         /* 更溫和的橘黃色 */
+      --danger: #f56c6c;
+      --info: #909399;
     }
 
     * {
@@ -38,11 +38,12 @@
     }
 
     body {
-      font-family: 'Roboto', 'Noto Sans TC', Arial, '微軟正黑體', 'Microsoft JhengHei', sans-serif;
+      font-family: 'Outfit', 'Noto Sans TC', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
       background-color: var(--bg-color);
       color: var(--text-dark);
       line-height: 1.6;
     }
+
 
     /* Header */
     .app-header {
@@ -276,16 +277,17 @@
       background-color: var(--card-bg);
       border: 1px solid var(--border-color);
       border-radius: var(--border-radius);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      box-shadow: 0 10px 30px rgba(0, 71, 187, 0.04), 0 1px 8px rgba(0, 0, 0, 0.02);
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
     .card-header {
-      padding: 1.2rem 1.5rem;
-      border-bottom: 1px solid var(--border-color);
-      background-color: #fdfdfd;
+      padding: 1.25rem 1.5rem;
+      border-bottom: 1px solid #f0f2f5;
+      background-color: #ffffff;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -294,7 +296,7 @@
     .card-header h3 {
       font-size: 1.15rem;
       color: var(--navy);
-      font-weight: 700;
+      font-weight: 600;
       display: flex;
       align-items: center;
       gap: 0.5rem;
@@ -318,6 +320,7 @@
       flex: 1;
     }
 
+
     /* Form Styles */
     .form-group {
       margin-bottom: 1.25rem;
@@ -335,19 +338,24 @@
     .form-group input[type="text"],
     .form-group input[type="number"] {
       width: 100%;
-      padding: 0.6rem 0.8rem;
+      padding: 0.65rem 0.85rem;
       border: 1px solid var(--border-color);
-      border-radius: 4px;
+      border-radius: 8px;
       font-size: 0.95rem;
       outline: none;
+      background-color: #f8fafc;
+      color: var(--text-dark);
       font-family: inherit;
-      transition: border-color 0.2s;
+      transition: all 0.2s ease-in-out;
     }
 
     .form-group select:focus,
     .form-group input:focus {
       border-color: var(--brand-blue);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.12);
     }
+
 
     .checkbox-group {
       display: flex;
@@ -414,32 +422,37 @@
     .input-table input[type="number"],
     .item-table input[type="number"],
     .item-table select {
-      padding: 0.4rem 0.6rem;
+      padding: 0.45rem 0.7rem;
       border: 1px solid var(--border-color);
-      border-radius: 4px;
+      border-radius: 6px;
       width: 100px;
       text-align: right;
       outline: none;
+      background-color: #f8fafc;
       font-family: inherit;
+      transition: all 0.2s ease-in-out;
     }
 
     .input-table input[type="number"]:focus,
     .item-table input[type="number"]:focus,
     .item-table select:focus {
       border-color: var(--brand-blue);
+      background-color: #ffffff;
+      box-shadow: 0 0 0 3px rgba(0, 71, 187, 0.12);
     }
 
     .input-table input.read-only-target,
     .input-table td.read-only-target-td {
-      background-color: #f5f7fa;
-      color: #606266;
-      font-weight: bold;
+      background-color: #f1f3f5;
+      color: #718096;
+      font-weight: 600;
     }
 
     .input-table input.read-only-target {
-      border-color: #e4e7ed;
+      border-color: transparent;
       cursor: not-allowed;
     }
+
 
     /* Badge */
     .badge {
@@ -488,40 +501,47 @@
 
     /* Buttons */
     .btn {
-      padding: 0.65rem 1.5rem;
+      padding: 0.7rem 1.6rem;
       font-size: 0.95rem;
-      font-weight: 700;
-      border-radius: 4px;
+      font-weight: 600;
+      border-radius: 8px;
       cursor: pointer;
-      border: none;
-      transition: background-color 0.2s, transform 0.1s;
+      border: 1px solid transparent;
+      transition: all 0.25s ease-in-out;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       font-family: inherit;
+      gap: 0.5rem;
     }
 
     .btn:active {
-      transform: scale(0.98);
+      transform: scale(0.97);
     }
 
     .btn-primary {
-      background-color: var(--brand-red);
+      background-color: var(--brand-blue);
       color: #ffffff;
     }
 
     .btn-primary:hover {
-      background-color: var(--brand-red-hover);
+      background-color: var(--brand-blue-hover);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(0, 71, 187, 0.15);
     }
 
     .btn-secondary {
-      background-color: #e4e7ed;
-      color: #606266;
+      background-color: #f1f5f9;
+      color: #475569;
+      border-color: #e2e8f0;
     }
 
     .btn-secondary:hover {
-      background-color: #dcdfe6;
+      background-color: #e2e8f0;
+      color: #1e293b;
+      transform: translateY(-1px);
     }
+
 
     .btn-danger {
       background-color: var(--danger);
@@ -884,31 +904,86 @@
       color: var(--brand-red-hover);
     }
 
-    /* Quick fill bar */
-    .quick-fill-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.5rem;
-      background-color: #f4f6f9;
-      padding: 0.6rem 1rem;
-      border-radius: 6px;
-      border: 1px dashed var(--border-color);
-      margin-bottom: 1rem;
-      align-items: center;
+    /* Data Backup置底大型卡片樣式 */
+    .data-backup-card {
+      margin-top: 3rem;
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--border-radius);
+      box-shadow: 0 10px 30px rgba(0, 71, 187, 0.04), 0 1px 8px rgba(0, 0, 0, 0.02);
+      padding: 2rem;
+      text-align: center;
     }
 
-    .quick-fill-label {
-      font-size: 0.85rem;
-      font-weight: 700;
+    .backup-title {
+      font-size: 1.2rem;
+      font-weight: 600;
       color: var(--navy);
+      margin-bottom: 0.5rem;
     }
 
-    .btn-sm {
-      padding: 0.25rem 0.5rem !important;
-      font-size: 0.8rem !important;
-      height: auto !important;
+    .backup-desc {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1.5rem;
+    }
+
+    .backup-buttons-group {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-backup {
+      padding: 0.9rem 2rem !important;
+      font-size: 1rem !important;
+      min-width: 220px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.04);
+    }
+
+    .btn-backup svg {
+      width: 20px;
+      height: 20px;
+      fill: currentColor;
+    }
+
+    .btn-backup-export {
+      background-color: #10b981 !important;
+      color: #ffffff !important;
+      border-color: #10b981 !important;
+    }
+
+    .btn-backup-export:hover {
+      background-color: #059669 !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(16, 185, 129, 0.2);
+    }
+
+    .btn-backup-import {
+      background-color: #3b82f6 !important;
+      color: #ffffff !important;
+      border-color: #3b82f6 !important;
+    }
+
+    .btn-backup-import:hover {
+      background-color: #2563eb !important;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 16px rgba(59, 130, 246, 0.2);
+    }
+
+    .backup-status-text {
+      font-size: 0.9rem;
+      color: #10b981;
+      font-weight: 700;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 0.3rem;
+      margin-top: 1rem;
     }
   </style>
+
 
 </head>
 <body>
@@ -1045,21 +1120,14 @@
               </table>
             </div>
 
-            <div class="action-bar">
+            <div class="action-bar" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
               <button class="btn btn-secondary" onclick="resetAppraisalForm()">重設輸入</button>
               <button class="btn btn-primary" onclick="calculateAppraisal()">開始計算考核</button>
+              <span id="save-status-msg" style="font-size: 0.85rem; color: #10b981; margin-left: 1rem; align-self: center; font-weight: bold; display: none;">✓ 已自動存檔</span>
             </div>
-
-            <!-- Backup and Auto-save status -->
-            <div class="data-management-bar" style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; gap: 0.5rem; flex-wrap: wrap;">
-              <button type="button" class="btn btn-secondary btn-sm" onclick="exportDataToFile()" style="background-color: #67c23a; color: white; border-color: #67c23a;">💾 匯出備份檔 (.json)</button>
-              <button type="button" class="btn btn-secondary btn-sm" onclick="triggerImportFile()" style="background-color: #e6a23c; color: white; border-color: #e6a23c;">📂 匯入備份檔</button>
-              <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
-              <span id="save-status-msg" style="font-size: 0.85rem; color: #67c23a; margin-left: auto; align-self: center; font-weight: bold; display: none;">✓ 已自動存檔</span>
-            </div>
-
           </div>
         </div>
+
 
         <!-- Right / Bottom appraisal result panel -->
         <div class="card result-card" id="appr-result-card" style="display: none;">
@@ -1248,7 +1316,28 @@
       </div>
     </section>
 
+    <!-- Local Data Backup & Restore Card -->
+    <div class="data-backup-card">
+      <div class="backup-title">📋 本地資料備份與還原</div>
+      <div class="backup-desc">您可以將目前的試算進度與編制設定下載備份至電腦，或在下個月上傳舊備份檔以還原進度。</div>
+      <div class="backup-buttons-group">
+        <button type="button" class="btn btn-backup btn-backup-export" onclick="exportDataToFile()">
+          <svg viewBox="0 0 24 24"><path d="M19 12v7H5v-7H3v7c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zm-6 .67l2.59-2.58L17 11.5l-5 5-5-5 1.41-1.41L11 12.67V3h2z"/></svg>
+          💾 匯出備份資料 (.json)
+        </button>
+        <button type="button" class="btn btn-backup btn-backup-import" onclick="triggerImportFile()">
+          <svg viewBox="0 0 24 24"><path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/></svg>
+          📂 匯入備份資料
+        </button>
+        <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
+      </div>
+      <div class="backup-status-text" id="backup-status-msg">
+        <span>✓ 資料已成功同步</span>
+      </div>
+    </div>
+
   </main>
+
 
   <!-- Footer -->
   <footer class="app-footer-bar">
