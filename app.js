@@ -526,7 +526,7 @@ function resetAppraisalForm() {
     }
   });
   // 隱藏結果區
-  document.getElementById('appr-result-card').style.display = 'none';
+  document.getElementById('appr-result-area').style.display = 'none';
   document.getElementById('tab-appraisal').classList.remove('has-result');
 }
 
@@ -844,13 +844,13 @@ function calculateAppraisal() {
     estPanel.style.display = 'none';
   }
 
-  // 顯現結果卡片
-  document.getElementById('appr-result-card').style.display = 'block';
+  // 顯現結果區域
+  document.getElementById('appr-result-area').style.display = 'block';
   document.getElementById('tab-appraisal').classList.add('has-result');
 
 
   // 滾動到結果畫面
-  document.getElementById('appr-result-card').scrollIntoView({ behavior: 'smooth' });
+  document.getElementById('appr-result-area').scrollIntoView({ behavior: 'smooth' });
   
   // 儲存狀態至本地
   saveAppState();

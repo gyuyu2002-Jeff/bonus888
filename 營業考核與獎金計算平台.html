@@ -573,6 +573,10 @@
       animation: fadeIn 0.4s ease-in-out;
     }
 
+    #appr-result-area {
+      animation: fadeIn 0.5s ease-out;
+    }
+
     .bg-navy {
       background-color: var(--navy) !important;
     }
@@ -1157,147 +1161,149 @@
         </div>
 
 
-        <!-- Right / Bottom appraisal result panel -->
-        <div class="card result-card" id="appr-result-card" style="display: none;">
-          <div class="card-header bg-navy text-white">
-            <h3><span class="header-num">3</span> 考評判定結果</h3>
-          </div>
-          <div class="card-body">
-            <!-- Score dashboard -->
-            <div class="score-dashboard">
-              <div class="score-circle">
-                <span class="score-val" id="res-total-score">0</span>
-                <span class="score-lbl">綜合考核得分</span>
-              </div>
-              <div class="decision-panel">
-                <div class="decision-title">考評判定結果</div>
-                <div class="decision-badge" id="res-decision-badge">--</div>
-                <div class="decision-desc" id="res-decision-desc"></div>
-              </div>
-            </div>
-
-            <!-- Score breakdown detail -->
-            <h4 class="section-title">指標得分明細</h4>
-            <div class="metric-breakdown">
+            <!-- Appraisal Result Area (Embedded directly below action buttons) -->
+            <div id="appr-result-area" style="display: none; margin-top: 2rem; border-top: 1.5px solid var(--border-color); padding-top: 1.5rem;">
+              <h3 style="margin-bottom: 1.5rem; color: var(--navy); font-size: 1.2rem; font-weight: 700; display: flex; align-items: center; gap: 0.5rem;">
+                <span class="header-num" style="background-color: var(--brand-blue); color: white; border-radius: 50%; width: 24px; height: 24px; display: inline-flex; align-items: center; justify-content: center; font-size: 0.9rem;">3</span> 考評判定結果
+              </h3>
               
-              <!-- Metric 1 -->
-              <div class="metric-item">
-                <div class="metric-info">
-                  <span class="metric-name">1. 業績達成率 (配分 40%)</span>
-                  <span class="metric-score" id="res-m1-score">0 / 40 分</span>
+              <!-- Score dashboard -->
+              <div class="score-dashboard">
+                <div class="score-circle">
+                  <span class="score-val" id="res-total-score">0</span>
+                  <span class="score-lbl">綜合考核得分</span>
                 </div>
-                <div class="metric-progress-container">
-                  <div class="metric-progress-bar bg-blue" id="res-m1-progress" style="width: 0%"></div>
-                </div>
-                <div class="metric-details">
-                  目標累計: <span id="res-m1-target">0</span> 萬 | 實際累計: <span id="res-m1-actual">0</span> 萬 (達成率: <span id="res-m1-rate">0%</span>)
-                </div>
-              </div>
-
-              <!-- Metric 2 -->
-              <div class="metric-item">
-                <div class="metric-info">
-                  <span class="metric-name" id="res-m2-name">2. MFP新開發台數達成率 (配分 40%)</span>
-                  <span class="metric-score" id="res-m2-score">0 / 40 分</span>
-                </div>
-                <div class="metric-progress-container">
-                  <div class="metric-progress-bar bg-orange" id="res-m2-progress" style="width: 0%"></div>
-                </div>
-                <div class="metric-details">
-                  目標累計: <span id="res-m2-target">0</span> 台 | 實際累計: <span id="res-m2-actual">0</span> 台 (達成率: <span id="res-m2-rate">0%</span>)
+                <div class="decision-panel">
+                  <div class="decision-title">考評判定結果</div>
+                  <div class="decision-badge" id="res-decision-badge">--</div>
+                  <div class="decision-desc" id="res-decision-desc"></div>
                 </div>
               </div>
 
-              <!-- Metric 3 -->
-              <div class="metric-item">
-                <div class="metric-info">
-                  <span class="metric-name" id="res-m3-name">3. MFP新機台數達成率 (配分 20%)</span>
-                  <span class="metric-score" id="res-m3-score">0 / 20 分</span>
+              <!-- Score breakdown detail -->
+              <h4 class="section-title">指標得分明細</h4>
+              <div class="metric-breakdown">
+                
+                <!-- Metric 1 -->
+                <div class="metric-item">
+                  <div class="metric-info">
+                    <span class="metric-name">1. 業績達成率 (配分 40%)</span>
+                    <span class="metric-score" id="res-m1-score">0 / 40 分</span>
+                  </div>
+                  <div class="metric-progress-container">
+                    <div class="metric-progress-bar bg-blue" id="res-m1-progress" style="width: 0%"></div>
+                  </div>
+                  <div class="metric-details">
+                    目標累計: <span id="res-m1-target">0</span> 萬 | 實際累計: <span id="res-m1-actual">0</span> 萬 (達成率: <span id="res-m1-rate">0%</span>)
+                  </div>
                 </div>
-                <div class="metric-progress-container">
-                  <div class="metric-progress-bar bg-red" id="res-m3-progress" style="width: 0%"></div>
+
+                <!-- Metric 2 -->
+                <div class="metric-item">
+                  <div class="metric-info">
+                    <span class="metric-name" id="res-m2-name">2. MFP新開發台數達成率 (配分 40%)</span>
+                    <span class="metric-score" id="res-m2-score">0 / 40 分</span>
+                  </div>
+                  <div class="metric-progress-container">
+                    <div class="metric-progress-bar bg-orange" id="res-m2-progress" style="width: 0%"></div>
+                  </div>
+                  <div class="metric-details">
+                    目標累計: <span id="res-m2-target">0</span> 台 | 實際累計: <span id="res-m2-actual">0</span> 台 (達成率: <span id="res-m2-rate">0%</span>)
+                  </div>
                 </div>
-                <div class="metric-details">
-                  目標累計: <span id="res-m3-target">0</span> 台 | 實際累計: <span id="res-m3-actual">0</span> 台 (達成率: <span id="res-m3-rate">0%</span>)
+
+                <!-- Metric 3 -->
+                <div class="metric-item">
+                  <div class="metric-info">
+                    <span class="metric-name" id="res-m3-name">3. MFP新機台數達成率 (配分 20%)</span>
+                    <span class="metric-score" id="res-m3-score">0 / 20 分</span>
+                  </div>
+                  <div class="metric-progress-container">
+                    <div class="metric-progress-bar bg-red" id="res-m3-progress" style="width: 0%"></div>
+                  </div>
+                  <div class="metric-details">
+                    目標累計: <span id="res-m3-target">0</span> 台 | 實際累計: <span id="res-m3-actual">0</span> 台 (達成率: <span id="res-m3-rate">0%</span>)
+                  </div>
                 </div>
+
               </div>
 
-            </div>
-
-            <!-- Weighted Breakdown (for supervisor) -->
-            <div id="supervisor-weight-panel" class="note-box info-note" style="display: none;">
-              <h4>👥 營業主任小組加權明細</h4>
-              <p>個人考評分數: <strong id="res-personal-score">0</strong> 分 (權重 70% = <span id="res-personal-weighted">0</span> 分)</p>
-              <p>小組考評分數: <strong id="res-group-score">0</strong> 分 (權重 30% = <span id="res-group-weighted">0</span> 分)</p>
-              <p class="small text-muted">* 小組目標與實際為各月份組員(含主任)總和。</p>
-            </div>
-
-            <!-- Minimum Condition Checklist -->
-            <h4 class="section-title">合格條件檢核</h4>
-            <ul class="checklist">
-              <li id="chk-score-80">
-                <span class="chk-icon"></span> 晉升標準: 近期分數達 80 分以上 (現狀: <span id="chk-score-80-val">0</span> 分)
-              </li>
-              <li id="chk-score-60">
-                <span class="chk-icon"></span> 降級警示: 分數低於 60 分將面臨降級 (現狀: <span id="chk-score-60-val">0</span> 分)
-              </li>
-              <li id="chk-probation-pass" style="display: none;">
-                <span class="chk-icon"></span> 試用正式任用: 分數達 80 分以上 (現狀: <span id="chk-prob-score-val">0</span> 分)
-              </li>
-            </ul>
-
-            <!-- Future requirements estimation (only visible when partially filled) -->
-            <div id="future-estimation-panel" style="display: none; margin-top: 1.5rem; padding: 1.25rem; background-color: #ecf5ff; border: 1px solid #dcdfe6; border-radius: 8px; border-left: 4px solid var(--brand-blue);">
-              <h4 style="color: var(--brand-blue); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem; font-size: 1rem; font-weight: 600;">
-                <span>🔮 未來月份業績與台數缺額預估</span>
-              </h4>
-              <p style="font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.75rem;">
-                您目前已填寫了 <strong id="est-filled-months" class="text-primary" style="color: var(--brand-blue);">0</strong> 個月實績，剩餘 <strong id="est-rem-months" class="text-primary" style="color: var(--brand-blue);">0</strong> 個月。若要達到目標，剩餘月份平均每月需達成：
-              </p>
-              
-              <div style="overflow-x: auto;">
-                <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; min-width: 500px;">
-                  <thead>
-                    <tr style="border-bottom: 2px solid #cbd5e1;">
-                      <th style="padding: 0.5rem 0.2rem; color: var(--navy); font-weight: 600;">預估達成目標</th>
-                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均業績</th>
-                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均新開發</th>
-                      <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均新機</th>
-                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均業績</th>
-                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均新開發</th>
-                      <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均新機</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr style="border-bottom: 1px solid #e2e8f0;">
-                      <td style="padding: 0.6rem 0.2rem; font-weight: bold; color: var(--brand-blue);">🎯 100% 滿分目標</td>
-                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-sales">0 萬</td>
-                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-dev">0 台</td>
-                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-mach">0 台</td>
-                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-sales">0 萬</td>
-                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-dev">0 台</td>
-                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-mach">0 台</td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 0.6rem 0.2rem; font-weight: bold; color: #e11d48;">🛡️ 60分 保級基本線 (均衡型)</td>
-                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-sales">0 萬</td>
-                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-dev">0 台</td>
-                      <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-mach">0 台</td>
-                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-sales">0 萬</td>
-                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-dev">0 台</td>
-                      <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-mach">0 台</td>
-                    </tr>
-                  </tbody>
-                </table>
+              <!-- Weighted Breakdown (for supervisor) -->
+              <div id="supervisor-weight-panel" class="note-box info-note" style="display: none;">
+                <h4>👥 營業主任小組加權明細</h4>
+                <p>個人考評分數: <strong id="res-personal-score">0</strong> 分 (權重 70% = <span id="res-personal-weighted">0</span> 分)</p>
+                <p>小組考評分數: <strong id="res-group-score">0</strong> 分 (權重 30% = <span id="res-group-weighted">0</span> 分)</p>
+                <p class="small text-muted">* 小組目標與實際為各月份組員(含主任)總和。</p>
               </div>
-              <small style="display: block; margin-top: 0.6rem; color: var(--text-muted); font-size: 0.75rem; line-height: 1.4;">
-                * 註：當月只要有輸入任何一個實際數值，即視為該月已填寫；剩餘每月業績若算出來小於 0 則顯示 0 萬；台數皆採無條件進位整數；若為營業主任，小組包含組員與主任目標總加。
-              </small>
+
+              <!-- Minimum Condition Checklist -->
+              <h4 class="section-title">合格條件檢核</h4>
+              <ul class="checklist">
+                <li id="chk-score-80">
+                  <span class="chk-icon"></span> 晉升標準: 近期分數達 80 分以上 (現狀: <span id="chk-score-80-val">0</span> 分)
+                </li>
+                <li id="chk-score-60">
+                  <span class="chk-icon"></span> 降級警示: 分數低於 60 分將面臨降級 (現狀: <span id="chk-score-60-val">0</span> 分)
+                </li>
+                <li id="chk-probation-pass" style="display: none;">
+                  <span class="chk-icon"></span> 試用正式任用: 分數達 80 分以上 (現狀: <span id="chk-prob-score-val">0</span> 分)
+                </li>
+              </ul>
+
+              <!-- Future requirements estimation (only visible when partially filled) -->
+              <div id="future-estimation-panel" style="display: none; margin-top: 1.5rem; padding: 1.25rem; background-color: #ecf5ff; border: 1px solid #dcdfe6; border-radius: 8px; border-left: 4px solid var(--brand-blue);">
+                <h4 style="color: var(--brand-blue); margin-bottom: 0.5rem; display: flex; align-items: center; gap: 0.3rem; font-size: 1rem; font-weight: 600;">
+                  <span>🔮 未來月份業績與台數缺額預估</span>
+                </h4>
+                <p style="font-size: 0.85rem; color: var(--text-dark); margin-bottom: 0.75rem;">
+                  您目前已填寫了 <strong id="est-filled-months" class="text-primary" style="color: var(--brand-blue);">0</strong> 個月實績，剩餘 <strong id="est-rem-months" class="text-primary" style="color: var(--brand-blue);">0</strong> 個月。若要達到目標，剩餘月份平均每月需達成：
+                </p>
+                
+                <div style="overflow-x: auto;">
+                  <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: left; min-width: 500px;">
+                    <thead>
+                      <tr style="border-bottom: 2px solid #cbd5e1;">
+                        <th style="padding: 0.5rem 0.2rem; color: var(--navy); font-weight: 600;">預估達成目標</th>
+                        <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均業績</th>
+                        <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均新開發</th>
+                        <th style="padding: 0.5rem 0.2rem; text-align: right; color: var(--brand-blue); font-weight: 600;">個人月均新機</th>
+                        <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均業績</th>
+                        <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均新開發</th>
+                        <th class="est-group-th" style="padding: 0.5rem 0.2rem; text-align: right; color: var(--navy); font-weight: 600;">小組月均新機</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 0.6rem 0.2rem; font-weight: bold; color: var(--brand-blue);">🎯 100% 滿分目標</td>
+                        <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-sales">0 萬</td>
+                        <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-dev">0 台</td>
+                        <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-s-mach">0 台</td>
+                        <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-sales">0 萬</td>
+                        <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-dev">0 台</td>
+                        <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold;" id="est-100-g-mach">0 台</td>
+                      </tr>
+                      <tr>
+                        <td style="padding: 0.6rem 0.2rem; font-weight: bold; color: #e11d48;">🛡️ 60分 保級基本線 (均衡型)</td>
+                        <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-sales">0 萬</td>
+                        <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-dev">0 台</td>
+                        <td style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-s-mach">0 台</td>
+                        <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-sales">0 萬</td>
+                        <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-dev">0 台</td>
+                        <td class="est-group-td" style="padding: 0.6rem 0.2rem; text-align: right; font-weight: bold; color: #e11d48;" id="est-60-g-mach">0 台</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <small style="display: block; margin-top: 0.6rem; color: var(--text-muted); font-size: 0.75rem; line-height: 1.4;">
+                  * 註：當月只要有輸入任何一個實際數值，即視為該月已填寫；剩餘每月業績若算出來小於 0 則顯示 0 萬；台數皆採無條件進位整數；若為營業主任，小組包含組員與主任目標總加。
+                </small>
+              </div>
+
             </div>
 
           </div>
-
         </div>
+
 
       </div>
     </section>
@@ -1933,7 +1939,7 @@
           input.value = '';
         }
       });
-      document.getElementById('appr-result-card').style.display = 'none';
+      document.getElementById('appr-result-area').style.display = 'none';
       document.getElementById('tab-appraisal').classList.remove('has-result');
     }
 
@@ -2227,9 +2233,9 @@
         estPanel.style.display = 'none';
       }
 
-      document.getElementById('appr-result-card').style.display = 'block';
+      document.getElementById('appr-result-area').style.display = 'block';
       document.getElementById('tab-appraisal').classList.add('has-result');
-      document.getElementById('appr-result-card').scrollIntoView({ behavior: 'smooth' });
+      document.getElementById('appr-result-area').scrollIntoView({ behavior: 'smooth' });
 
       
       saveAppState();
