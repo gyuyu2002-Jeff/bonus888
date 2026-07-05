@@ -67,14 +67,14 @@ window.onload = function() {
     onAppraisalConfigChange();
   }
 
-  // 監聽實際值輸入，實時計算並自動存檔
   const tbody = document.getElementById('appr-input-tbody');
   if (tbody) {
     tbody.addEventListener('input', () => {
-      calculateAppraisal();
+      saveAppState();
       showSaveStatus();
     });
   }
+
   
   // 成交獎金預設新增一列
   addOutrightRow();
