@@ -990,3 +990,77 @@ function resetCommissionForm() {
   document.getElementById('com-rental-qty').textContent = '0';
   document.getElementById('com-rental-total').textContent = '0';
 }
+
+// 快速模擬填寫實績
+function quickFillActuals(type) {
+  const monthsCount = getEvaluationMonths();
+  const role = document.getElementById('appr-role').value;
+  
+  for (let m = 1; m <= monthsCount; m++) {
+    // 檢查輸入項是否存在 (避免試用期首月唯讀欄位)
+    const tSales = parseFloat(document.getElementById(`t-sales-${m}`).value) || 0;
+    const tDev = parseInt(document.getElementById(`t-dev-${m}`).value) || 0;
+    const tMach = parseInt(document.getElementById(`t-mach-${m}`).value) || 0;
+
+    let aSales = 0, aDev = 0, aMach = 0;
+
+    if (type === '100') {
+      aSales = tSales;
+      aDev = tDev;
+      aMach = tMach;
+    } else if (type === '90') {
+      aSales = tSales * 0.9;
+      aDev = Math.ceil(tDev * 0.9);
+      aMach = Math.ceil(tMach * 0.9);
+    } else if (type === 'pass-s1') {
+      aSales = tSales * 0.9;
+      aDev = Math.ceil(tDev * 0.5); // 低於 60% 得低消分
+      aMach = Math.ceil(tMach * 0.5);
+    } else if (type === 'pass-s3') {
+      aSales = tSales * 0.8;
+      aDev = Math.ceil(tDev * 0.6);
+      aMach = Math.ceil(tMach * 0.6);
+    }
+
+    // 填入個人實際值
+    // 若為 0 則不填寫顯示 placeholder
+    document.getElementById(`a-sales-${m}`).value = aSales > 0 ? parseFloat(aSales.toFixed(1)) : '';
+    document.getElementById(`a-dev-${m}`).value = aDev > 0 ? aDev : '';
+    document.getElementById(`a-mach-${m}`).value = aMach > 0 ? aMach : '';
+
+    if (role === 'supervisor') {
+      const tgSales = parseFloat(document.getElementById(`tg-sales-${m}`).value) || 0;
+      const tgDev = parseInt(document.getElementById(`tg-dev-${m}`).value) || 0;
+      const tgMach = parseInt(document.getElementById(`tg-mach-${m}`).value) || 0;
+
+      let agSales = 0, agDev = 0, agMach = 0;
+
+      if (type === '100') {
+        agSales = tgSales;
+        agDev = tgDev;
+        agMach = tgMach;
+      } else if (type === '90') {
+        agSales = tgSales * 0.9;
+        agDev = Math.ceil(tgDev * 0.9);
+        agMach = Math.ceil(tgMach * 0.9);
+      } else if (type === 'pass-s1') {
+        agSales = tgSales * 0.9;
+        agDev = Math.ceil(tgDev * 0.5);
+        agMach = Math.ceil(tgMach * 0.5);
+      } else if (type === 'pass-s3') {
+        agSales = tgSales * 0.8;
+        agDev = Math.ceil(tgDev * 0.6);
+        agMach = Math.ceil(tgMach * 0.6);
+      }
+
+      // 填入小組實際值
+      document.getElementById(`ag-sales-${m}`).value = agSales > 0 ? parseFloat(agSales.toFixed(1)) : '';
+      document.getElementById(`ag-dev-${m}`).value = agDev > 0 ? agDev : '';
+      document.getElementById(`ag-mach-${m}`).value = agMach > 0 ? agMach : '';
+    }
+  }
+
+  // 填寫完畢自動進行計算
+  calculateAppraisal();
+}
+

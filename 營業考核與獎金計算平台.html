@@ -883,7 +883,33 @@
     .btn-delete-member:hover {
       color: var(--brand-red-hover);
     }
+
+    /* Quick fill bar */
+    .quick-fill-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      background-color: #f4f6f9;
+      padding: 0.6rem 1rem;
+      border-radius: 6px;
+      border: 1px dashed var(--border-color);
+      margin-bottom: 1rem;
+      align-items: center;
+    }
+
+    .quick-fill-label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--navy);
+    }
+
+    .btn-sm {
+      padding: 0.25rem 0.5rem !important;
+      font-size: 0.8rem !important;
+      height: auto !important;
+    }
   </style>
+
 </head>
 <body>
 
@@ -1005,6 +1031,16 @@
           </div>
           <div class="card-body">
             <span class="mobile-scroll-tip">👈 手機版可左右滑動表格輸入實績 👉</span>
+
+            <!-- Quick Simulation Actions -->
+            <div class="quick-fill-bar">
+              <span class="quick-fill-label">⚡ 快速模擬填寫：</span>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="quickFillActuals('100')">100% 達成</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="quickFillActuals('90')">90% 達成</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="quickFillActuals('pass-s1')">方案一保級 (業績90%)</button>
+              <button type="button" class="btn btn-secondary btn-sm" onclick="quickFillActuals('pass-s3')">方案三保級 (均衡60分)</button>
+            </div>
+
             <div class="scroll-wrapper">
               <table class="input-table" id="appr-input-table">
                 <thead>
@@ -2157,6 +2193,75 @@
       document.getElementById('com-rental-qty').textContent = '0';
       document.getElementById('com-rental-total').textContent = '0';
     }
+
+    // 快速模擬填寫實績
+    function quickFillActuals(type) {
+      const monthsCount = getEvaluationMonths();
+      const role = document.getElementById('appr-role').value;
+      
+      for (let m = 1; m <= monthsCount; m++) {
+        const tSales = parseFloat(document.getElementById(`t-sales-${m}`).value) || 0;
+        const tDev = parseInt(document.getElementById(`t-dev-${m}`).value) || 0;
+        const tMach = parseInt(document.getElementById(`t-mach-${m}`).value) || 0;
+
+        let aSales = 0, aDev = 0, aMach = 0;
+
+        if (type === '100') {
+          aSales = tSales;
+          aDev = tDev;
+          aMach = tMach;
+        } else if (type === '90') {
+          aSales = tSales * 0.9;
+          aDev = Math.ceil(tDev * 0.9);
+          aMach = Math.ceil(tMach * 0.9);
+        } else if (type === 'pass-s1') {
+          aSales = tSales * 0.9;
+          aDev = Math.ceil(tDev * 0.5);
+          aMach = Math.ceil(tMach * 0.5);
+        } else if (type === 'pass-s3') {
+          aSales = tSales * 0.8;
+          aDev = Math.ceil(tDev * 0.6);
+          aMach = Math.ceil(tMach * 0.6);
+        }
+
+        document.getElementById(`a-sales-${m}`).value = aSales > 0 ? parseFloat(aSales.toFixed(1)) : '';
+        document.getElementById(`a-dev-${m}`).value = aDev > 0 ? aDev : '';
+        document.getElementById(`a-mach-${m}`).value = aMach > 0 ? aMach : '';
+
+        if (role === 'supervisor') {
+          const tgSales = parseFloat(document.getElementById(`tg-sales-${m}`).value) || 0;
+          const tgDev = parseInt(document.getElementById(`tg-dev-${m}`).value) || 0;
+          const tgMach = parseInt(document.getElementById(`tg-mach-${m}`).value) || 0;
+
+          let agSales = 0, agDev = 0, agMach = 0;
+
+          if (type === '100') {
+            agSales = tgSales;
+            agDev = tgDev;
+            agMach = tgMach;
+          } else if (type === '90') {
+            agSales = tgSales * 0.9;
+            agDev = Math.ceil(tgDev * 0.9);
+            agMach = Math.ceil(tgMach * 0.9);
+          } else if (type === 'pass-s1') {
+            agSales = tgSales * 0.9;
+            agDev = Math.ceil(tgDev * 0.5);
+            agMach = Math.ceil(tgMach * 0.5);
+          } else if (type === 'pass-s3') {
+            agSales = tgSales * 0.8;
+            agDev = Math.ceil(tgDev * 0.6);
+            agMach = Math.ceil(tgMach * 0.6);
+          }
+
+          document.getElementById(`ag-sales-${m}`).value = agSales > 0 ? parseFloat(agSales.toFixed(1)) : '';
+          document.getElementById(`ag-dev-${m}`).value = agDev > 0 ? agDev : '';
+          document.getElementById(`ag-mach-${m}`).value = agMach > 0 ? agMach : '';
+        }
+      }
+
+      calculateAppraisal();
+    }
   </script>
+
 </body>
 </html>

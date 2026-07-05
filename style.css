@@ -891,4 +891,30 @@ body {
   color: var(--brand-red-hover);
 }
 
+/* Quick fill bar */
+.quick-fill-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  background-color: #f4f6f9;
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px dashed var(--border-color);
+  margin-bottom: 1rem;
+  align-items: center;
+}
+
+.quick-fill-label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--navy);
+}
+
+.btn-sm {
+  padding: 0.25rem 0.5rem !important;
+  font-size: 0.8rem !important;
+  height: auto !important;
+}
+
+
 
