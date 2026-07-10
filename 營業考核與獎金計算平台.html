@@ -96,6 +96,21 @@
       font-size: 1.2rem;
     }
 
+    .logo-version {
+      font-size: 0.7rem;
+      color: rgba(100, 116, 139, 0.8);
+      background-color: #f1f5f9;
+      border: 1px solid var(--border-color);
+      padding: 0.2rem 0.6rem;
+      border-radius: 12px;
+      margin-left: 0.75rem;
+      font-weight: 500;
+      display: inline-block;
+      vertical-align: middle;
+      letter-spacing: 0.05em;
+    }
+
+
     /* Tabs */
     .app-tabs {
       background-color: var(--navy);
@@ -1061,6 +1076,7 @@
         <span class="logo-group">HUXEN</span>
         <span class="logo-divider">|</span>
         <span class="logo-title">營業考核與獎金計算平台</span>
+        <span class="logo-version">v3.2 (更新日期: 2026-07-10)</span>
       </div>
     </div>
   </header>
@@ -1567,7 +1583,69 @@
 
   </main>
 
+  <!-- Version Changelog Section -->
+  <section class="changelog-section" style="max-width: 1400px; margin: 0 auto 3rem auto; padding: 0 1.5rem;">
+    <div class="card" style="border-top: 4px solid var(--navy);">
+      <div class="card-header bg-light" style="background-color: #f8fafc; border-bottom: 1px solid var(--border-color); padding: 0.75rem 1.25rem;">
+        <h3 style="font-size: 1.1rem; color: var(--navy); display: flex; align-items: center; gap: 0.5rem; margin: 0; font-weight: 700;">
+          📋 網站重大功能更新說明 (Version History)
+        </h3>
+      </div>
+      <div class="card-body" style="padding: 1.5rem; font-size: 0.85rem; line-height: 1.6; color: var(--text-dark);">
+        <div class="changelog-timeline" style="display: flex; flex-direction: column; gap: 1.25rem;">
+          
+          <div class="changelog-item">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <strong style="font-size: 0.95rem; color: var(--brand-blue); font-weight: 700;">🚀 v3.2 版本迭代 — 晉升導向優化與版本追蹤</strong>
+              <span class="badge" style="background-color: var(--brand-blue); color: white; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 500; font-size: 0.75rem;">2026-07-10</span>
+            </div>
+            <ul style="margin-left: 1.25rem; list-style-type: disc;">
+              <li><strong>門檻位置左右對調</strong>：將激勵同仁晉升的「挑戰晉升 (80分)」條件移至切換分頁左側並作為預設啟動顯示；「保級門檻 (60分)」移至右側。</li>
+              <li><strong>首頁標題版本註記</strong>：於網頁最上方系統名稱旁清楚備註網站版本號與更新日期。</li>
+              <li><strong>版本演進歷程區</strong>：於網頁底部新增「網站重大功能更新說明」區塊，完整記錄平台演進足跡。</li>
+            </ul>
+          </div>
 
+          <div class="changelog-item" style="border-top: 1px dashed #e2e8f0; padding-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <strong style="font-size: 0.95rem; color: var(--navy); font-weight: 700;">📦 v3.0 版本迭代 — 使用手冊導入與規則回歸</strong>
+              <span class="badge" style="background-color: #64748b; color: white; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 500; font-size: 0.75rem;">2026-07-06</span>
+            </div>
+            <ul style="margin-left: 1.25rem; list-style-type: disc;">
+              <li><strong>線上使用說明書</strong>：新增第三分頁「使用說明與規則手冊」，完整收錄操作步驟、權重計分公式、達成率評分級距對照表。</li>
+              <li><strong>試用期規則調整</strong>：取消試用期「首月不設目標」免計機制，恢復計算完整 3 個月的試用期考核指標。</li>
+              <li><strong>伺服器部署穩定化</strong>：新增 `.nojekyll` 繞過編譯引擎，解決 GitHub Pages 中文檔名編碼導致部署失敗的問題。</li>
+            </ul>
+          </div>
+
+          <div class="changelog-item" style="border-top: 1px dashed #e2e8f0; padding-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <strong style="font-size: 0.95rem; color: var(--navy); font-weight: 700;">💅 v2.0 版本迭代 — 介面重塑與未來缺額估算</strong>
+              <span class="badge" style="background-color: #64748b; color: white; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 500; font-size: 0.75rem;">2026-07-05</span>
+            </div>
+            <ul style="margin-left: 1.25rem; list-style-type: disc;">
+              <li><strong>智慧未來缺額估算</strong>：填寫不足月時，系統自動估算未來剩餘月份「平均每個月需要多少業績與開發台數」以順利保級或晉升。</li>
+              <li><strong>完全無左右拉桿表格</strong>：採用「目標/實際」上下堆疊排版，縮小表格寬度，實現桌機/平板完全不需要滑動左右滾動條。</li>
+              <li><strong>版面整合與防跳動</strong>：將考評判定結果卡片直接內嵌於計算按鈕正下方；優化背景自動存檔功能，填寫流暢不中斷。</li>
+            </ul>
+          </div>
+
+          <div class="changelog-item" style="border-top: 1px dashed #e2e8f0; padding-top: 1rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.4rem;">
+              <strong style="font-size: 0.95rem; color: var(--navy); font-weight: 700;">💾 v1.0 - v1.2 基礎版 — 組員編制與資料存檔</strong>
+              <span class="badge" style="background-color: #64748b; color: white; padding: 0.15rem 0.5rem; border-radius: 4px; font-weight: 500; font-size: 0.75rem;">2026-07-05</span>
+            </div>
+            <ul style="margin-left: 1.25rem; list-style-type: disc;">
+              <li><strong>核心計算功能</strong>：建立 OA / CA 各職級資料庫，動態計算個人考評分數、賣斷獎金與租機定額獎金。</li>
+              <li><strong>主管組員編制</strong>：主任身分可動態設定組員及職級，並自動連動計算主任小組保級與晉升的目標門檻。</li>
+              <li><strong>資料自動存檔</strong>：支援本機 LocalStorage 自動存檔以及 JSON 備份檔匯出/匯入（支援備份檔案改名）。</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Footer -->
   <footer class="app-footer-bar">
@@ -1877,7 +1955,8 @@
 
 
     // 動態更新保級與免遭調降的條件
-    let activeRefTab = 'pass'; // 'pass' 或 'promote'
+    let activeRefTab = 'promote'; // 'promote' 或 'pass'
+
 
     // 切換參考門檻的 Tab
     function toggleRefScheme(type) {
@@ -1984,8 +2063,8 @@
       let html = `
         <!-- Segmented Tab Control -->
         <div class="ref-tab-toggle">
-          <button type="button" class="ref-tab-btn ${activeRefTab === 'pass' ? 'active' : ''}" id="btn-ref-pass" onclick="toggleRefScheme('pass')">🛡️ 保級門檻 (60分)</button>
           <button type="button" class="ref-tab-btn ${activeRefTab === 'promote' ? 'active' : ''}" id="btn-ref-promote" onclick="toggleRefScheme('promote')">🚀 挑戰晉升 (80分)</button>
+          <button type="button" class="ref-tab-btn ${activeRefTab === 'pass' ? 'active' : ''}" id="btn-ref-pass" onclick="toggleRefScheme('pass')">🛡️ 保級門檻 (60分)</button>
         </div>
 
         <div class="ref-period-desc">

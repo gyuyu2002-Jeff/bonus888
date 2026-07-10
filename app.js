@@ -293,7 +293,8 @@ function renderInputTable() {
 }
 
 
-let activeRefTab = 'pass'; // 'pass' 或 'promote'
+let activeRefTab = 'promote'; // 'promote' 或 'pass'
+
 
 // 切換參考門檻的 Tab
 function toggleRefScheme(type) {
@@ -400,9 +401,10 @@ function updatePassConditions() {
   let html = `
     <!-- Segmented Tab Control -->
     <div class="ref-tab-toggle">
-      <button type="button" class="ref-tab-btn ${activeRefTab === 'pass' ? 'active' : ''}" id="btn-ref-pass" onclick="toggleRefScheme('pass')">🛡️ 保級門檻 (60分)</button>
       <button type="button" class="ref-tab-btn ${activeRefTab === 'promote' ? 'active' : ''}" id="btn-ref-promote" onclick="toggleRefScheme('promote')">🚀 挑戰晉升 (80分)</button>
+      <button type="button" class="ref-tab-btn ${activeRefTab === 'pass' ? 'active' : ''}" id="btn-ref-pass" onclick="toggleRefScheme('pass')">🛡️ 保級門檻 (60分)</button>
     </div>
+
 
     <div class="ref-period-desc">
       評核期間：${monthsCount} 個月
