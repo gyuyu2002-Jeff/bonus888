@@ -655,6 +655,14 @@ body {
   color: #ffffff !important;
 }
 
+.card-header.bg-navy h3,
+.card-header.bg-blue h3,
+.card-header.bg-orange h3,
+.card-header.bg-red h3 {
+  color: #ffffff !important;
+}
+
+
 .score-dashboard {
   display: flex;
   flex-direction: column;
