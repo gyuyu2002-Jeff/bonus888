@@ -1066,6 +1066,127 @@ body {
   background-color: #f8fafc !important;
 }
 
+/* 列印專屬排版優化 */
+@media print {
+  /* 隱藏網頁上無須列印的互動元件與導覽 */
+  header,
+  nav,
+  .left-panel,
+  .action-bar,
+  .action-bar-center,
+  .rental-actions,
+  .btn,
+  button,
+  input[type="file"],
+  #save-status-msg,
+  .changelog-section,
+  footer,
+  .item-table th:last-child,
+  .item-table td:last-child {
+    display: none !important;
+  }
+
+  /* 擴展主容器至 100% 滿版 */
+  body {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .app-content {
+    max-width: 100% !important;
+    width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  .grid-container {
+    display: block !important;
+  }
+
+  /* 卡片改為無陰影邊框 */
+  .card {
+    box-shadow: none !important;
+    border: 1px solid #000000 !important;
+    margin-bottom: 20px !important;
+    page-break-inside: avoid !important;
+    background-color: #ffffff !important;
+  }
+
+  .card-header {
+    background-color: #f1f5f9 !important;
+    color: #000000 !important;
+    border-bottom: 1px solid #000000 !important;
+    padding: 0.5rem 1rem !important;
+  }
+
+  .card-header h3 {
+    color: #000000 !important;
+  }
+
+  /* 在列印網頁最上方顯示報告抬頭 */
+  body::before {
+    content: "互盛 HUXEN 營業考核與獎金試算報告";
+    display: block;
+    font-size: 18pt;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #000000;
+  }
+
+  /* 在列印網頁最下方顯示聲明與備註 */
+  body::after {
+    content: "所有數據試算僅供參考，本平台僅供內部試算參考，實際待遇與考評結果依事業部權責主管核定之公文為準";
+    display: block;
+    font-size: 9pt;
+    text-align: center;
+    margin-top: 30px;
+    border-top: 1px solid #000000;
+    padding-top: 10px;
+    color: #334155;
+  }
+
+  /* 去除輸入欄位背景與下拉選單箭頭 */
+  input, select {
+    border: none !important;
+    background: transparent !important;
+    color: #000000 !important;
+    font-weight: bold !important;
+    padding: 0 !important;
+    appearance: none !important;
+  }
+
+  /* 表格框線黑白化 */
+  .item-table, .metric-breakdown-table {
+    border: 1px solid #000000 !important;
+    width: 100% !important;
+  }
+
+  .item-table th, .item-table td {
+    border: 1px solid #000000 !important;
+    color: #000000 !important;
+  }
+
+  .item-table th {
+    background-color: #f1f5f9 !important;
+  }
+
+  /* 強制將結果區完全展開顯示 */
+  #appr-result-area {
+    display: block !important;
+    border-top: 2px solid #000000 !important;
+  }
+  
+  .score-circle {
+    border: 2px solid #000000 !important;
+    color: #000000 !important;
+  }
+}
+
+
 
 
 

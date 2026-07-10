@@ -148,6 +148,7 @@
             <div class="action-bar" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
               <button class="btn btn-primary" onclick="calculateAppraisal()">開始計算考核</button>
               <button class="btn btn-secondary" onclick="resetAppraisalForm()">重設輸入</button>
+              <button type="button" class="btn" onclick="window.print()" style="background-color: var(--navy); color: #ffffff; border-color: var(--navy); transform: none; box-shadow: none;">🖨️ 列印報告</button>
               <button type="button" class="btn btn-backup-export" onclick="exportDataToFile()">💾 匯出備份</button>
               <button type="button" class="btn btn-backup-import" onclick="triggerImportFile()">📂 匯入備份</button>
               <input type="file" id="import-file-input" style="display: none;" accept=".json" onchange="importDataFromFile(event)">
@@ -385,6 +386,7 @@
             </div>
             <div class="action-bar-center mt-4">
               <button class="btn btn-secondary mr-2" onclick="resetCommissionForm()">全部重設</button>
+              <button class="btn mr-2" onclick="window.print()" style="background-color: var(--navy); color: #ffffff; border-color: var(--navy); transform: none; box-shadow: none;">🖨️ 列印報告</button>
               <button class="btn btn-primary" onclick="calculateCommission()">計算總成交獎金</button>
             </div>
           </div>
@@ -596,7 +598,7 @@
   <footer class="app-footer-bar">
     <div class="footer-container">
       <p>本平台僅供內部試算參考，實際待遇與考評結果依事業部權責主管核定之公文為準</p>
-      <p class="small text-muted">如成果有誤，個人恕不負責 by antigravity</p>
+      <p class="small text-muted">個人恕不負責 by antigravity 吳漢君</p>
     </div>
   </footer>
 
