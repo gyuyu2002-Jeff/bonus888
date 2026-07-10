@@ -614,7 +614,6 @@ function updatePassConditions() {
 
   document.getElementById('pass-conditions-content').innerHTML = html;
 }
-}
 
 // 新增小組組員
 function addTeamMember() {
