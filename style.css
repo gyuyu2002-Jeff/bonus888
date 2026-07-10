@@ -185,6 +185,42 @@ body {
 }
 
 /* 保級及格條件樣式 */
+/* 參考門檻切換頁籤 */
+.ref-tab-toggle {
+  display: flex;
+  gap: 0.25rem;
+  margin-bottom: 0.75rem;
+  background-color: #f1f5f9;
+  padding: 0.25rem;
+  border-radius: 6px;
+  border: 1px solid var(--border-color);
+}
+
+.ref-tab-btn {
+  flex: 1;
+  border: none;
+  background: none;
+  padding: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.ref-tab-btn:hover {
+  color: var(--navy);
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.ref-tab-btn.active {
+  background-color: #ffffff;
+  color: var(--navy);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
 .ref-period-desc {
   font-size: 0.9rem;
   color: var(--navy);

@@ -293,6 +293,29 @@ function renderInputTable() {
 }
 
 
+let activeRefTab = 'pass'; // 'pass' 或 'promote'
+
+// 切換參考門檻的 Tab
+function toggleRefScheme(type) {
+  activeRefTab = type;
+  const btnPass = document.getElementById('btn-ref-pass');
+  const btnPromote = document.getElementById('btn-ref-promote');
+  const divPass = document.getElementById('scheme-pass-group');
+  const divPromote = document.getElementById('scheme-promote-group');
+  
+  if (type === 'pass') {
+    if (btnPass) btnPass.classList.add('active');
+    if (btnPromote) btnPromote.classList.remove('active');
+    if (divPass) divPass.style.display = 'block';
+    if (divPromote) divPromote.style.display = 'none';
+  } else {
+    if (btnPass) btnPass.classList.remove('active');
+    if (btnPromote) btnPromote.classList.add('active');
+    if (divPass) divPass.style.display = 'none';
+    if (divPromote) divPromote.style.display = 'block';
+  }
+}
+
 // 動態更新保級與免遭調降的條件
 function updatePassConditions() {
   const channel = document.getElementById('appr-channel').value;
@@ -338,17 +361,13 @@ function updatePassConditions() {
   const m2Name = channel === 'OA' ? 'MFP新開發台數' : '交換機銷售台數';
   const m3Name = channel === 'OA' ? 'MFP新機台數' : 'MFP銷售台數(新+舊)';
 
-  // 方案一：業績主攻 (業績達成率達 90%，得分 30 + 20 + 12 = 62)
+  // === 保級門檻計算 (60分) ===
   const s1Sales = (tSales * 0.9).toFixed(1);
   const g1Sales = (tgSales * 0.9).toFixed(1);
-  
-  // 方案二：台數主攻 (項目二達成率 80%，得分 30；項目三達成率 60%，得分 14；總分 20 + 30 + 14 = 64)
   const s2Dev = Math.ceil(tDev * 0.8);
   const s2Mach = Math.ceil(tMach * 0.6);
   const g2Dev = Math.ceil(tgDev * 0.8);
   const g2Mach = Math.ceil(tgMach * 0.6);
-
-  // 方案三：均衡達成 (業績 80% 得25分；項目二 60% 得25分；項目三 60% 得14分；總分 25 + 25 + 14 = 64)
   const s3Sales = (tSales * 0.8).toFixed(1);
   const s3Dev = Math.ceil(tDev * 0.6);
   const s3Mach = Math.ceil(tMach * 0.6);
@@ -356,9 +375,37 @@ function updatePassConditions() {
   const g3Dev = Math.ceil(tgDev * 0.6);
   const g3Mach = Math.ceil(tgMach * 0.6);
 
+  // === 晉升門檻計算 (80分) ===
+  const p1Sales = tSales.toFixed(1);
+  const p1Dev = tDev;
+  const p1Mach = tMach;
+  const pg1Sales = tgSales.toFixed(1);
+  const pg1Dev = tgDev;
+  const pg1Mach = tgMach;
+
+  const p2Sales = (tSales * 0.8).toFixed(1);
+  const p2Dev = Math.ceil(tDev * 1.2);
+  const p2Mach = Math.ceil(tMach * 0.8);
+  const pg2Sales = (tgSales * 0.8).toFixed(1);
+  const pg2Dev = Math.ceil(tgDev * 1.2);
+  const pg2Mach = Math.ceil(tgMach * 0.8);
+
+  const p3Sales = (tSales * 1.1).toFixed(1);
+  const p3Dev = Math.ceil(tDev * 0.8);
+  const p3Mach = Math.ceil(tMach * 0.6);
+  const pg3Sales = (tgSales * 1.1).toFixed(1);
+  const pg3Dev = Math.ceil(tgDev * 0.8);
+  const pg3Mach = Math.ceil(tgMach * 0.6);
+
   let html = `
+    <!-- Segmented Tab Control -->
+    <div class="ref-tab-toggle">
+      <button type="button" class="ref-tab-btn ${activeRefTab === 'pass' ? 'active' : ''}" id="btn-ref-pass" onclick="toggleRefScheme('pass')">🛡️ 保級門檻 (60分)</button>
+      <button type="button" class="ref-tab-btn ${activeRefTab === 'promote' ? 'active' : ''}" id="btn-ref-promote" onclick="toggleRefScheme('promote')">🚀 挑戰晉升 (80分)</button>
+    </div>
+
     <div class="ref-period-desc">
-      評核期間：${monthsCount} 個月 ${isFirstMonthZero ? '(首月免計目標，實計 2 個月)' : ''}
+      評核期間：${monthsCount} 個月
     </div>
     <ul class="ref-target-list">
       <li><span>個人業績累計總目標:</span> <strong>${tSales.toFixed(1)} 萬元</strong></li>
@@ -378,7 +425,9 @@ function updatePassConditions() {
   html += `
     </ul>
     
-    <h4 class="ref-note" style="font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; font-size: 0.9rem;">💡 保級最低門檻方案 (達 60 分免遭調降) :</h4>
+    <!-- 1. 保級門檻群組 (60分) -->
+    <div id="scheme-pass-group" style="display: ${activeRefTab === 'pass' ? 'block' : 'none'};">
+      <h4 class="ref-note" style="font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; font-size: 0.9rem;">🛡️ 保級最低門檻方案 (達 60 分免遭調降) :</h4>
   `;
 
   if (role === 'supervisor') {
@@ -453,13 +502,12 @@ function updatePassConditions() {
     `;
   }
 
-
   if (role === 'supervisor') {
     html += `
       <div class="ref-note text-danger" style="margin-top: 0.8rem; font-weight: bold; font-size: 0.8rem; line-height: 1.4;">
         ⚠️ 營業主任特別說明：<br>
         主任總分 = 個人得分 * 70% + 小組得分 * 30%。<br>
-        此保級計算需在個人與小組皆滿足該方案的情況下成立，建議個人與團隊業績均以此底線自我要求。
+        此保級計算需在個人與小組皆滿足該方案的情況下成立。
       </div>
     `;
   } else {
@@ -468,7 +516,104 @@ function updatePassConditions() {
     `;
   }
 
+  html += `
+    </div>
+
+    <!-- 2. 挑戰晉升群組 (80分) -->
+    <div id="scheme-promote-group" style="display: ${activeRefTab === 'promote' ? 'block' : 'none'};">
+      <h4 class="ref-note" style="font-weight: 700; color: var(--navy); margin-bottom: 0.5rem; font-size: 0.9rem;">🚀 晉升與優秀挑戰方案 (達 80 分以上晉升) :</h4>
+  `;
+
+  if (role === 'supervisor') {
+    html += `
+      <div class="ref-scheme-card balanced-focus" style="border-left: 4px solid var(--navy);">
+        <div class="ref-scheme-title">
+          <span>方案一：全能型完美晉升</span>
+          <span class="badge bg-blue" style="background-color: var(--navy) !important;">88分晉升</span>
+        </div>
+        <div class="ref-scheme-desc" style="line-height: 1.6;">
+          • <strong>個人</strong>：累計達 <strong>${p1Sales} 萬</strong>、${m2Name} <strong>${p1Dev} 台</strong>、${m3Name} <strong>${p1Mach} 台</strong> (均達 100%)<br>
+          • <strong>小組</strong>：累計達 <strong>${pg1Sales} 萬</strong>、${m2Name} <strong>${pg1Dev} 台</strong>、${m3Name} <strong>${pg1Mach} 台</strong> (均達 100%)<br>
+          <small class="text-muted">個人與小組三項核心指標皆達標，總分可達 88 分完美獲得晉升！</small>
+        </div>
+      </div>
+
+      <div class="ref-scheme-card qty-focus">
+        <div class="ref-scheme-title">
+          <span>方案二：開發超群挑戰型</span>
+          <span class="badge bg-orange">81分晉升</span>
+        </div>
+        <div class="ref-scheme-desc" style="line-height: 1.6;">
+          • <strong>個人</strong>：業績 <strong>${p2Sales} 萬</strong> (80%)、${m2Name} <strong>${p2Dev} 台</strong> (120%)、${m3Name} <strong>${p2Mach} 台</strong> (80%)<br>
+          • <strong>小組</strong>：業績 <strong>${pg2Sales} 萬</strong> (80%)、${m2Name} <strong>${pg2Dev} 台</strong> (120%)、${m3Name} <strong>${pg2Mach} 台</strong> (80%)<br>
+          <small class="text-muted">以新開發超額達成為核心，即使業績與新機稍弱，總分仍有 81 分順利晉升！</small>
+        </div>
+      </div>
+
+      <div class="ref-scheme-card sales-focus">
+        <div class="ref-scheme-title">
+          <span>方案三：業績超群挑戰型</span>
+          <span class="badge bg-red" style="background-color: var(--brand-red) !important;">84分晉升</span>
+        </div>
+        <div class="ref-scheme-desc" style="line-height: 1.6;">
+          • <strong>個人</strong>：業績 <strong>${p3Sales} 萬</strong> (110%)、${m2Name} <strong>${p3Dev} 台</strong> (80%)、${m3Name} <strong>${p3Mach} 台</strong> (60%)<br>
+          • <strong>小組</strong>：業績 <strong>${pg3Sales} 萬</strong> (110%)、${m2Name} <strong>${pg3Dev} 台</strong> (80%)、${m3Name} <strong>${pg3Mach} 台</strong> (60%)<br>
+          <small class="text-muted">以業績超額達成為核心，即使開發與新機台數稍低，總分仍有 84 分順利晉升！</small>
+        </div>
+      </div>
+    `;
+  } else {
+    html += `
+      <div class="ref-scheme-card balanced-focus" style="border-left: 4px solid var(--navy);">
+        <div class="ref-scheme-title">
+          <span>方案一：全能型完美晉升</span>
+          <span class="badge bg-blue" style="background-color: var(--navy) !important;">88分晉升</span>
+        </div>
+        <div class="ref-scheme-desc">
+          個人業績達 <strong>${p1Sales} 萬元</strong>，${m2Name} 達 <strong>${p1Dev} 台</strong>，${m3Name} 達 <strong>${p1Mach} 台</strong> (全部指標 100% 達成)，總分達 88 分傑出晉升！
+        </div>
+      </div>
+
+      <div class="ref-scheme-card qty-focus">
+        <div class="ref-scheme-title">
+          <span>方案二：開發超群挑戰型</span>
+          <span class="badge bg-orange">81分晉升</span>
+        </div>
+        <div class="ref-scheme-desc">
+          個人業績達 <strong>${p2Sales} 萬元</strong> (80%)，${m2Name} 超群達 <strong>${p2Dev} 台</strong> (120%，得滿分40分)，${m3Name} 達 <strong>${p2Mach} 台</strong> (80%)，總分 81 分！
+        </div>
+      </div>
+
+      <div class="ref-scheme-card sales-focus">
+        <div class="ref-scheme-title">
+          <span>方案三：業績超群挑戰型</span>
+          <span class="badge bg-red" style="background-color: var(--brand-red) !important;">84分晉升</span>
+        </div>
+        <div class="ref-scheme-desc">
+          個人業績超群達 <strong>${p3Sales} 萬元</strong> (110%，得滿分40分)，${m2Name} 達 <strong>${p3Dev} 台</strong> (80%)，${m3Name} 達 <strong>${p3Mach} 台</strong> (60%)，總分 84 分！
+        </div>
+      </div>
+    `;
+  }
+
+  if (role === 'supervisor') {
+    html += `
+      <div class="ref-note text-success" style="margin-top: 0.8rem; font-weight: bold; font-size: 0.8rem; line-height: 1.4;">
+        🚀 主任卓越提醒：小組與個人皆需達成對應挑戰指標以確保綜合考評達 80 分以上。
+      </div>
+    `;
+  } else {
+    html += `
+      <p class="ref-note">* 以上為達成 80 分以上晉升門檻之黃金組合，鼓勵同仁挑選強項策略全力衝刺！</p>
+    `;
+  }
+
+  html += `
+    </div>
+  `;
+
   document.getElementById('pass-conditions-content').innerHTML = html;
+}
 }
 
 // 新增小組組員
