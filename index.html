@@ -122,7 +122,58 @@
               <!-- Dynamically populated by JS -->
             </div>
           </div>
+
+          <!-- Card 3: Drafts Manager -->
+          <div class="card draft-card mt-3">
+            <div class="card-header">
+              <h3>💾 試算草稿快速切換</h3>
+            </div>
+            <div class="card-body" style="padding: 1rem; font-size: 0.85rem; line-height: 1.5;">
+              <p style="margin-bottom: 0.75rem; color: var(--text-muted); font-size: 0.75rem; font-weight: normal;">
+                * 註：草稿僅儲存績效考核設定與數據，不影響獎金估算。
+              </p>
+              
+              <div class="draft-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <!-- Draft 1 -->
+                <div class="draft-row" style="display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--navy); font-size: 0.85rem;">👤 同仁晉升版</strong>
+                  <div style="display: flex; gap: 0.25rem;">
+                    <button type="button" class="btn" onclick="loadDraft('sales-promo')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #e2e8f0; color: var(--text-dark); border: 1px solid #cbd5e1; transform: none; box-shadow: none; height: 28px; line-height: 1;">📥 載入</button>
+                    <button type="button" class="btn" onclick="saveDraft('sales-promo')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #3b82f6; color: white; border: none; transform: none; box-shadow: none; height: 28px; line-height: 1;">💾 儲存</button>
+                  </div>
+                </div>
+
+                <!-- Draft 2 -->
+                <div class="draft-row" style="display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--navy); font-size: 0.85rem;">👤 同仁保級版</strong>
+                  <div style="display: flex; gap: 0.25rem;">
+                    <button type="button" class="btn" onclick="loadDraft('sales-pass')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #e2e8f0; color: var(--text-dark); border: 1px solid #cbd5e1; transform: none; box-shadow: none; height: 28px; line-height: 1;">📥 載入</button>
+                    <button type="button" class="btn" onclick="saveDraft('sales-pass')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #3b82f6; color: white; border: none; transform: none; box-shadow: none; height: 28px; line-height: 1;">💾 儲存</button>
+                  </div>
+                </div>
+
+                <!-- Draft 3 -->
+                <div class="draft-row" style="display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--navy); font-size: 0.85rem;">👥 主任晉升版</strong>
+                  <div style="display: flex; gap: 0.25rem;">
+                    <button type="button" class="btn" onclick="loadDraft('sup-promo')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #e2e8f0; color: var(--text-dark); border: 1px solid #cbd5e1; transform: none; box-shadow: none; height: 28px; line-height: 1;">📥 載入</button>
+                    <button type="button" class="btn" onclick="saveDraft('sup-promo')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #3b82f6; color: white; border: none; transform: none; box-shadow: none; height: 28px; line-height: 1;">💾 儲存</button>
+                  </div>
+                </div>
+
+                <!-- Draft 4 -->
+                <div class="draft-row" style="display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--navy); font-size: 0.85rem;">👥 主任保級版</strong>
+                  <div style="display: flex; gap: 0.25rem;">
+                    <button type="button" class="btn" onclick="loadDraft('sup-pass')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #e2e8f0; color: var(--text-dark); border: 1px solid #cbd5e1; transform: none; box-shadow: none; height: 28px; line-height: 1;">📥 載入</button>
+                    <button type="button" class="btn" onclick="saveDraft('sup-pass')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #3b82f6; color: white; border: none; transform: none; box-shadow: none; height: 28px; line-height: 1;">💾 儲存</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
 
 
         <!-- Middle input panel -->
@@ -173,6 +224,43 @@
                   <div class="decision-title">考評判定結果</div>
                   <div class="decision-badge" id="res-decision-badge">--</div>
                   <div class="decision-desc" id="res-decision-desc"></div>
+                </div>
+              </div>
+
+              <!-- Target Achievement Progress Bar -->
+              <div class="progress-dashboard" style="margin: 2rem 0; background-color: #f8fafc; padding: 1.25rem 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
+                <h4 style="color: var(--navy); margin-top: 0; margin-bottom: 1.2rem; font-size: 0.95rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+                  <span>📊 考評目標達成進度條</span>
+                  <span style="font-size: 0.9rem; color: var(--brand-blue); font-weight: 700;" id="progress-status-lbl">目前得分: 0 分</span>
+                </h4>
+                <div class="score-progress-container" style="position: relative; height: 16px; background-color: #e2e8f0; border-radius: 8px; margin: 1.5rem 0 2rem 0; overflow: visible;">
+                  <!-- Red Zone (0-59) -->
+                  <div class="progress-zone red-zone" style="position: absolute; left: 0; top: 0; bottom: 0; width: 60%; background: linear-gradient(90deg, #fca5a5, #ef4444); border-top-left-radius: 8px; border-bottom-left-radius: 8px;"></div>
+                  <!-- Orange Zone (60-79) -->
+                  <div class="progress-zone orange-zone" style="position: absolute; left: 60%; top: 0; bottom: 0; width: 20%; background: linear-gradient(90deg, #fef08a, #eab308);"></div>
+                  <!-- Green Zone (80-100) -->
+                  <div class="progress-zone green-zone" style="position: absolute; left: 80%; top: 0; bottom: 0; width: 20%; background: linear-gradient(90deg, #86efac, #22c55e); border-top-right-radius: 8px; border-bottom-right-radius: 8px;"></div>
+                  
+                  <!-- Marker lines for 60 and 80 -->
+                  <div class="progress-marker-line" style="position: absolute; left: 60%; top: -6px; bottom: -6px; width: 2px; background-color: #1e293b; z-index: 2;"></div>
+                  <div class="progress-marker-line" style="position: absolute; left: 80%; top: -6px; bottom: -6px; width: 2px; background-color: #1e293b; z-index: 2;"></div>
+                  
+                  <!-- Marker text labels -->
+                  <div style="position: absolute; left: 60%; top: -22px; transform: translateX(-50%); font-size: 0.75rem; color: #475569; font-weight: bold; white-space: nowrap;">60分 保級</div>
+                  <div style="position: absolute; left: 80%; top: -22px; transform: translateX(-50%); font-size: 0.75rem; color: #475569; font-weight: bold; white-space: nowrap;">80分 晉升</div>
+
+                  <!-- Current Score Pointer -->
+                  <div id="score-pointer" style="position: absolute; left: 0%; top: 50%; transform: translate(-50%, -50%); z-index: 3; transition: left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; align-items: center; overflow: visible;">
+                    <!-- Pin head -->
+                    <div style="width: 18px; height: 18px; background-color: var(--navy); border: 3px solid #ffffff; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.4); margin-bottom: 2px;"></div>
+                    <!-- Tooltip score -->
+                    <div id="pointer-score-tip" style="position: absolute; top: 20px; background-color: var(--navy); color: #ffffff; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.25);">0分</div>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; border-top: 1px dashed #cbd5e1; padding-top: 0.75rem;">
+                  <span style="color: #ef4444; font-weight: 500;">🚨 60分以下：降級警示區</span>
+                  <span style="color: #ca8a04; font-weight: 500;">🛡️ 60~79分：安全保級區</span>
+                  <span style="color: #16a34a; font-weight: 500;">🚀 80分以上：挑戰晉升區</span>
                 </div>
               </div>
 

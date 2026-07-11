@@ -1338,7 +1338,58 @@
               <!-- Dynamically populated by JS -->
             </div>
           </div>
+
+          <!-- Card 3: Drafts Manager -->
+          <div class="card draft-card mt-3">
+            <div class="card-header">
+              <h3>💾 試算草稿快速切換</h3>
+            </div>
+            <div class="card-body" style="padding: 1rem; font-size: 0.85rem; line-height: 1.5;">
+              <p style="margin-bottom: 0.75rem; color: var(--text-muted); font-size: 0.75rem; font-weight: normal;">
+                * 註：草稿僅儲存績效考核設定與數據，不影響獎金估算。
+              </p>
+              
+              <div class="draft-list" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                <!-- Draft 1 -->
+                <div class="draft-row" style="display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--navy); font-size: 0.85rem;">👤 同仁晉升版</strong>
+                  <div style="display: flex; gap: 0.25rem;">
+                    <button type="button" class="btn" onclick="loadDraft('sales-promo')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #e2e8f0; color: var(--text-dark); border: 1px solid #cbd5e1; transform: none; box-shadow: none; height: 28px; line-height: 1;">📥 載入</button>
+                    <button type="button" class="btn" onclick="saveDraft('sales-promo')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #3b82f6; color: white; border: none; transform: none; box-shadow: none; height: 28px; line-height: 1;">💾 儲存</button>
+                  </div>
+                </div>
+
+                <!-- Draft 2 -->
+                <div class="draft-row" style="display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--navy); font-size: 0.85rem;">👤 同仁保級版</strong>
+                  <div style="display: flex; gap: 0.25rem;">
+                    <button type="button" class="btn" onclick="loadDraft('sales-pass')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #e2e8f0; color: var(--text-dark); border: 1px solid #cbd5e1; transform: none; box-shadow: none; height: 28px; line-height: 1;">📥 載入</button>
+                    <button type="button" class="btn" onclick="saveDraft('sales-pass')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #3b82f6; color: white; border: none; transform: none; box-shadow: none; height: 28px; line-height: 1;">💾 儲存</button>
+                  </div>
+                </div>
+
+                <!-- Draft 3 -->
+                <div class="draft-row" style="display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--navy); font-size: 0.85rem;">👥 主任晉升版</strong>
+                  <div style="display: flex; gap: 0.25rem;">
+                    <button type="button" class="btn" onclick="loadDraft('sup-promo')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #e2e8f0; color: var(--text-dark); border: 1px solid #cbd5e1; transform: none; box-shadow: none; height: 28px; line-height: 1;">📥 載入</button>
+                    <button type="button" class="btn" onclick="saveDraft('sup-promo')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #3b82f6; color: white; border: none; transform: none; box-shadow: none; height: 28px; line-height: 1;">💾 儲存</button>
+                  </div>
+                </div>
+
+                <!-- Draft 4 -->
+                <div class="draft-row" style="display: flex; justify-content: space-between; align-items: center; background-color: #f8fafc; padding: 0.5rem 0.75rem; border-radius: 6px; border: 1px solid var(--border-color);">
+                  <strong style="color: var(--navy); font-size: 0.85rem;">👥 主任保級版</strong>
+                  <div style="display: flex; gap: 0.25rem;">
+                    <button type="button" class="btn" onclick="loadDraft('sup-pass')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #e2e8f0; color: var(--text-dark); border: 1px solid #cbd5e1; transform: none; box-shadow: none; height: 28px; line-height: 1;">📥 載入</button>
+                    <button type="button" class="btn" onclick="saveDraft('sup-pass')" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; border-radius: 4px; background-color: #3b82f6; color: white; border: none; transform: none; box-shadow: none; height: 28px; line-height: 1;">💾 儲存</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+
 
         <!-- Middle input panel -->
         <div class="card input-card">
@@ -1392,6 +1443,43 @@
                   <div class="decision-title">考評判定結果</div>
                   <div class="decision-badge" id="res-decision-badge">--</div>
                   <div class="decision-desc" id="res-decision-desc"></div>
+                </div>
+              </div>
+
+              <!-- Target Achievement Progress Bar -->
+              <div class="progress-dashboard" style="margin: 2rem 0; background-color: #f8fafc; padding: 1.25rem 1.5rem; border: 1px solid var(--border-color); border-radius: 8px; box-shadow: inset 0 1px 3px rgba(0,0,0,0.02);">
+                <h4 style="color: var(--navy); margin-top: 0; margin-bottom: 1.2rem; font-size: 0.95rem; font-weight: 700; display: flex; justify-content: space-between; align-items: center;">
+                  <span>📊 考評目標達成進度條</span>
+                  <span style="font-size: 0.9rem; color: var(--brand-blue); font-weight: 700;" id="progress-status-lbl">目前得分: 0 分</span>
+                </h4>
+                <div class="score-progress-container" style="position: relative; height: 16px; background-color: #e2e8f0; border-radius: 8px; margin: 1.5rem 0 2rem 0; overflow: visible;">
+                  <!-- Red Zone (0-59) -->
+                  <div class="progress-zone red-zone" style="position: absolute; left: 0; top: 0; bottom: 0; width: 60%; background: linear-gradient(90deg, #fca5a5, #ef4444); border-top-left-radius: 8px; border-bottom-left-radius: 8px;"></div>
+                  <!-- Orange Zone (60-79) -->
+                  <div class="progress-zone orange-zone" style="position: absolute; left: 60%; top: 0; bottom: 0; width: 20%; background: linear-gradient(90deg, #fef08a, #eab308);"></div>
+                  <!-- Green Zone (80-100) -->
+                  <div class="progress-zone green-zone" style="position: absolute; left: 80%; top: 0; bottom: 0; width: 20%; background: linear-gradient(90deg, #86efac, #22c55e); border-top-right-radius: 8px; border-bottom-right-radius: 8px;"></div>
+                  
+                  <!-- Marker lines for 60 and 80 -->
+                  <div class="progress-marker-line" style="position: absolute; left: 60%; top: -6px; bottom: -6px; width: 2px; background-color: #1e293b; z-index: 2;"></div>
+                  <div class="progress-marker-line" style="position: absolute; left: 80%; top: -6px; bottom: -6px; width: 2px; background-color: #1e293b; z-index: 2;"></div>
+                  
+                  <!-- Marker text labels -->
+                  <div style="position: absolute; left: 60%; top: -22px; transform: translateX(-50%); font-size: 0.75rem; color: #475569; font-weight: bold; white-space: nowrap;">60分 保級</div>
+                  <div style="position: absolute; left: 80%; top: -22px; transform: translateX(-50%); font-size: 0.75rem; color: #475569; font-weight: bold; white-space: nowrap;">80分 晉升</div>
+
+                  <!-- Current Score Pointer -->
+                  <div id="score-pointer" style="position: absolute; left: 0%; top: 50%; transform: translate(-50%, -50%); z-index: 3; transition: left 0.6s cubic-bezier(0.25, 0.8, 0.25, 1); display: flex; flex-direction: column; align-items: center; overflow: visible;">
+                    <!-- Pin head -->
+                    <div style="width: 18px; height: 18px; background-color: var(--navy); border: 3px solid #ffffff; border-radius: 50%; box-shadow: 0 2px 5px rgba(0,0,0,0.4); margin-bottom: 2px;"></div>
+                    <!-- Tooltip score -->
+                    <div id="pointer-score-tip" style="position: absolute; top: 20px; background-color: var(--navy); color: #ffffff; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.25);">0分</div>
+                  </div>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); line-height: 1.4; border-top: 1px dashed #cbd5e1; padding-top: 0.75rem;">
+                  <span style="color: #ef4444; font-weight: 500;">🚨 60分以下：降級警示區</span>
+                  <span style="color: #ca8a04; font-weight: 500;">🛡️ 60~79分：安全保級區</span>
+                  <span style="color: #16a34a; font-weight: 500;">🚀 80分以上：挑戰晉升區</span>
                 </div>
               </div>
 
@@ -1897,11 +1985,19 @@
 
       const tbody = document.getElementById('appr-input-tbody');
       if (tbody) {
-        tbody.addEventListener('input', () => {
+        tbody.addEventListener('input', (event) => {
+          const role = document.getElementById('appr-role').value;
+          if (role === 'supervisor') {
+            const targetId = event.target ? event.target.id : '';
+            if (targetId && (targetId.startsWith('a-sales-') || targetId.startsWith('a-dev-') || targetId.startsWith('a-mach-'))) {
+              recalculateGroupActuals();
+            }
+          }
           saveAppState();
           showSaveStatus();
         });
       }
+
 
       
       // 成交獎金預設新增一列
@@ -2481,14 +2577,16 @@
         const row = document.createElement('div');
         row.className = 'team-member-row';
         row.innerHTML = `
-          <span>組員 ${index + 1}:</span>
-          <select onchange="onMemberLevelChange(${member.id}, this.value)">
+          <span style="font-weight: 500;">組員 ${index + 1}:</span>
+          <select onchange="onMemberLevelChange(${member.id}, this.value)" style="flex: 1; min-width: 70px; padding: 0.25rem 0.5rem; font-size: 0.8rem; height: 30px;">
             <option value="1" ${member.level === 1 ? 'selected' : ''}>職級 1</option>
             <option value="2" ${member.level === 2 ? 'selected' : ''}>職級 2</option>
             <option value="3" ${member.level === 3 ? 'selected' : ''}>職級 3</option>
             <option value="4" ${member.level === 4 ? 'selected' : ''}>職級 4</option>
           </select>
-          <button type="button" class="btn-delete-member" onclick="removeTeamMember(${member.id})">×</button>
+          <button type="button" class="btn" onclick="triggerImportMember(${member.id})" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background-color: #10b981; color: white; border: none; border-radius: 4px; height: 30px; display: inline-flex; align-items: center; justify-content: center; gap: 0.2rem; transform: none; box-shadow: none;">📥 匯入</button>
+          <button type="button" class="btn-delete-member" onclick="removeTeamMember(${member.id})" style="font-size: 1.2rem; color: #ef4444; background: none; border: none; padding: 0 0.25rem; cursor: pointer; height: 30px; line-height: 30px;">×</button>
+
         `;
         listDiv.appendChild(row);
       });
@@ -2611,6 +2709,15 @@
 
       // 更新總分看板
       document.getElementById('res-total-score').textContent = finalScore;
+
+      // 更新進度條滑軌與指標位置
+      const progressStatusLbl = document.getElementById('progress-status-lbl');
+      if (progressStatusLbl) progressStatusLbl.textContent = `目前得分: ${finalScore} 分`;
+      const pointer = document.getElementById('score-pointer');
+      if (pointer) pointer.style.left = `${Math.min(100, Math.max(0, finalScore))}%`;
+      const pointerTip = document.getElementById('pointer-score-tip');
+      if (pointerTip) pointerTip.textContent = `${finalScore}分`;
+
 
       const supWeightPanel = document.getElementById('supervisor-weight-panel');
       if (role === 'supervisor') {
@@ -3293,7 +3400,200 @@
       };
       reader.readAsText(file);
     }
+
+    // ==========================================
+    // 9. 試算草稿切換與組員業績匯入輔助函數
+    // ==========================================
+
+    // 儲存特定草稿
+    function saveDraft(key) {
+      try {
+        const state = collectAppState();
+        localStorage.setItem(`huxen_draft_${key}`, JSON.stringify(state));
+        alert(`🎉 成功儲存至該草稿位置！`);
+      } catch (e) {
+        console.error('Failed to save draft:', e);
+        alert('儲存草稿失敗。');
+      }
+    }
+
+    // 載入特定草稿
+    function loadDraft(key) {
+      try {
+        const stateStr = localStorage.getItem(`huxen_draft_${key}`);
+        if (!stateStr) {
+          alert('🔍 該草稿位置尚未儲存任何數據！');
+          return;
+        }
+        
+        const state = JSON.parse(stateStr);
+        
+        // 1. 還原設定值
+        document.getElementById('appr-channel').value = state.channel;
+        document.getElementById('appr-role').value = state.role;
+        
+        // 還原主任組員編制
+        if (state.teamMembers) {
+          teamMembers = state.teamMembers;
+          memberIdCounter = teamMembers.reduce((max, m) => Math.max(max, m.id), 0);
+        } else {
+          teamMembers = [];
+          memberIdCounter = 0;
+        }
+        
+        // 重建職級選單
+        const levelSelect = document.getElementById('appr-level');
+        levelSelect.innerHTML = '';
+        const levels = Object.keys(TARGETS_DB[state.channel][state.role]);
+        levels.forEach(lvl => {
+          const opt = document.createElement('option');
+          opt.value = lvl;
+          opt.textContent = `職級 ${lvl}`;
+          levelSelect.appendChild(opt);
+        });
+        levelSelect.value = state.level;
+
+        document.getElementById('appr-mode').value = state.mode;
+        
+        // 切換顯示組員設定
+        const teamConfigWrap = document.getElementById('supervisor-team-config-wrap');
+        if (state.role === 'supervisor') {
+          teamConfigWrap.style.display = 'block';
+          renderTeamMembersList();
+        } else {
+          teamConfigWrap.style.display = 'none';
+        }
+        
+        // 2. 繪製輸入表格
+        renderInputTable();
+        
+        // 3. 填入實際值
+        const monthsCount = getEvaluationMonths();
+        for (let m = 1; m <= monthsCount; m++) {
+          const pData = state.actuals.personal[m];
+          if (pData) {
+            if (document.getElementById(`a-sales-${m}`)) document.getElementById(`a-sales-${m}`).value = pData.sales;
+            if (document.getElementById(`a-dev-${m}`)) document.getElementById(`a-dev-${m}`).value = pData.dev;
+            if (document.getElementById(`a-mach-${m}`)) document.getElementById(`a-mach-${m}`).value = pData.mach;
+          }
+          
+          if (state.role === 'supervisor') {
+            const gData = state.actuals.group[m];
+            if (gData) {
+              if (document.getElementById(`ag-sales-${m}`)) document.getElementById(`ag-sales-${m}`).value = gData.sales;
+              if (document.getElementById(`ag-dev-${m}`)) document.getElementById(`ag-dev-${m}`).value = gData.dev;
+              if (document.getElementById(`ag-mach-${m}`)) document.getElementById(`ag-mach-${m}`).value = gData.mach;
+            }
+          }
+        }
+        
+        // 4. 重新計算一次
+        calculateAppraisal();
+        alert('🎉 成功載入草稿數據！');
+      } catch (e) {
+        console.error('Failed to load draft:', e);
+        alert('載入草稿失敗。');
+      }
+    }
+
+    // 主任端：一鍵匯入個別組員的績效資料
+    function triggerImportMember(memberId) {
+      const fileInput = document.createElement('input');
+      fileInput.type = 'file';
+      fileInput.accept = '.json';
+      fileInput.style.display = 'none';
+      
+      fileInput.onchange = function(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            const state = JSON.parse(e.target.result);
+            if (!state.actuals || !state.actuals.personal) {
+              alert('匯入失敗：該檔案不包含有效的個人考核實績數據！');
+              return;
+            }
+            
+            const member = teamMembers.find(m => m.id === memberId);
+            if (member) {
+              member.actuals = state.actuals.personal;
+              
+              if (state.level) {
+                member.level = parseInt(state.level);
+                renderTeamMembersList();
+              }
+              
+              recalculateGroupActuals();
+              alert(`🎉 成功匯入組員績效，並已自動累加計算至小組實際值！`);
+            }
+          } catch (err) {
+            alert('解析檔案失敗，請確認檔案格式是否正確。');
+          }
+        };
+        reader.readAsText(file);
+      };
+      
+      document.body.appendChild(fileInput);
+      fileInput.click();
+      fileInput.remove();
+    }
+
+    // 主任端：依據個人實際值 + 各個已匯入組員的實際值，自動累加小組的實際值
+    function recalculateGroupActuals() {
+      const monthsCount = getEvaluationMonths();
+      for (let m = 1; m <= monthsCount; m++) {
+        const personalSalesVal = document.getElementById(`a-sales-${m}`) ? document.getElementById(`a-sales-${m}`).value : '';
+        const personalDevVal = document.getElementById(`a-dev-${m}`) ? document.getElementById(`a-dev-${m}`).value : '';
+        const personalMachVal = document.getElementById(`a-mach-${m}`) ? document.getElementById(`a-mach-${m}`).value : '';
+
+        let groupSalesSum = personalSalesVal !== '' ? parseFloat(personalSalesVal) : 0;
+        let groupDevSum = personalDevVal !== '' ? parseInt(personalDevVal) : 0;
+        let groupMachSum = personalMachVal !== '' ? parseInt(personalMachVal) : 0;
+        
+        let hasImportedData = personalSalesVal !== '' || personalDevVal !== '' || personalMachVal !== '';
+        
+        teamMembers.forEach(member => {
+          if (member.actuals && member.actuals[m]) {
+            const mSales = member.actuals[m].sales;
+            const mDev = member.actuals[m].dev;
+            const mMach = member.actuals[m].mach;
+            
+            if (mSales !== '') {
+              groupSalesSum += parseFloat(mSales);
+              hasImportedData = true;
+            }
+            if (mDev !== '') {
+              groupDevSum += parseInt(mDev);
+              hasImportedData = true;
+            }
+            if (mMach !== '') {
+              groupMachSum += parseInt(mMach);
+              hasImportedData = true;
+            }
+          }
+        });
+        
+        const gsInput = document.getElementById(`ag-sales-${m}`);
+        const gdInput = document.getElementById(`ag-dev-${m}`);
+        const gmInput = document.getElementById(`ag-mach-${m}`);
+        
+        if (gsInput) {
+          gsInput.value = hasImportedData ? parseFloat(groupSalesSum.toFixed(1)) : '';
+        }
+        if (gdInput) {
+          gdInput.value = hasImportedData ? groupDevSum : '';
+        }
+        if (gmInput) {
+          gmInput.value = hasImportedData ? groupMachSum : '';
+        }
+      }
+      
+      calculateAppraisal();
+    }
   </script>
+
 
 
 </body>

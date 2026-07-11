@@ -69,11 +69,19 @@ window.onload = function() {
 
   const tbody = document.getElementById('appr-input-tbody');
   if (tbody) {
-    tbody.addEventListener('input', () => {
+    tbody.addEventListener('input', (event) => {
+      const role = document.getElementById('appr-role').value;
+      if (role === 'supervisor') {
+        const targetId = event.target ? event.target.id : '';
+        if (targetId && (targetId.startsWith('a-sales-') || targetId.startsWith('a-dev-') || targetId.startsWith('a-mach-'))) {
+          recalculateGroupActuals();
+        }
+      }
       saveAppState();
       showSaveStatus();
     });
   }
+
 
   
   // 成交獎金預設新增一列
@@ -651,14 +659,16 @@ function renderTeamMembersList() {
     const row = document.createElement('div');
     row.className = 'team-member-row';
     row.innerHTML = `
-      <span>組員 ${index + 1}:</span>
-      <select onchange="onMemberLevelChange(${member.id}, this.value)">
+      <span style="font-weight: 500;">組員 ${index + 1}:</span>
+      <select onchange="onMemberLevelChange(${member.id}, this.value)" style="flex: 1; min-width: 70px; padding: 0.25rem 0.5rem; font-size: 0.8rem; height: 30px;">
         <option value="1" ${member.level === 1 ? 'selected' : ''}>職級 1</option>
         <option value="2" ${member.level === 2 ? 'selected' : ''}>職級 2</option>
         <option value="3" ${member.level === 3 ? 'selected' : ''}>職級 3</option>
         <option value="4" ${member.level === 4 ? 'selected' : ''}>職級 4</option>
       </select>
-      <button type="button" class="btn-delete-member" onclick="removeTeamMember(${member.id})">×</button>
+      <button type="button" class="btn" onclick="triggerImportMember(${member.id})" style="padding: 0.25rem 0.5rem; font-size: 0.75rem; background-color: #10b981; color: white; border: none; border-radius: 4px; height: 30px; display: inline-flex; align-items: center; justify-content: center; gap: 0.2rem; transform: none; box-shadow: none;">📥 匯入</button>
+      <button type="button" class="btn-delete-member" onclick="removeTeamMember(${member.id})" style="font-size: 1.2rem; color: #ef4444; background: none; border: none; padding: 0 0.25rem; cursor: pointer; height: 30px; line-height: 30px;">×</button>
+
     `;
     listDiv.appendChild(row);
   });
@@ -797,6 +807,15 @@ function calculateAppraisal() {
   
   // 更新總分
   document.getElementById('res-total-score').textContent = finalScore;
+
+  // 更新進度條滑軌與指標位置
+  const progressStatusLbl = document.getElementById('progress-status-lbl');
+  if (progressStatusLbl) progressStatusLbl.textContent = `目前得分: ${finalScore} 分`;
+  const pointer = document.getElementById('score-pointer');
+  if (pointer) pointer.style.left = `${Math.min(100, Math.max(0, finalScore))}%`;
+  const pointerTip = document.getElementById('pointer-score-tip');
+  if (pointerTip) pointerTip.textContent = `${finalScore}分`;
+
 
   // 顯示主任小組加權面板
   const supWeightPanel = document.getElementById('supervisor-weight-panel');
@@ -1529,5 +1548,198 @@ function importDataFromFile(event) {
   };
   reader.readAsText(file);
 }
+
+// ==========================================
+// 9. 試算草稿切換與組員業績匯入輔助函數
+// ==========================================
+
+// 儲存特定草稿
+function saveDraft(key) {
+  try {
+    const state = collectAppState();
+    localStorage.setItem(`huxen_draft_${key}`, JSON.stringify(state));
+    alert(`🎉 成功儲存至該草稿位置！`);
+  } catch (e) {
+    console.error('Failed to save draft:', e);
+    alert('儲存草稿失敗。');
+  }
+}
+
+// 載入特定草稿
+function loadDraft(key) {
+  try {
+    const stateStr = localStorage.getItem(`huxen_draft_${key}`);
+    if (!stateStr) {
+      alert('🔍 該草稿位置尚未儲存任何數據！');
+      return;
+    }
+    
+    const state = JSON.parse(stateStr);
+    
+    // 1. 還原設定值
+    document.getElementById('appr-channel').value = state.channel;
+    document.getElementById('appr-role').value = state.role;
+    
+    // 還原主任組員編制
+    if (state.teamMembers) {
+      teamMembers = state.teamMembers;
+      memberIdCounter = teamMembers.reduce((max, m) => Math.max(max, m.id), 0);
+    } else {
+      teamMembers = [];
+      memberIdCounter = 0;
+    }
+    
+    // 重建職級選單
+    const levelSelect = document.getElementById('appr-level');
+    levelSelect.innerHTML = '';
+    const levels = Object.keys(TARGETS_DB[state.channel][state.role]);
+    levels.forEach(lvl => {
+      const opt = document.createElement('option');
+      opt.value = lvl;
+      opt.textContent = `職級 ${lvl}`;
+      levelSelect.appendChild(opt);
+    });
+    levelSelect.value = state.level;
+
+    document.getElementById('appr-mode').value = state.mode;
+    
+    // 切換顯示組員設定
+    const teamConfigWrap = document.getElementById('supervisor-team-config-wrap');
+    if (state.role === 'supervisor') {
+      teamConfigWrap.style.display = 'block';
+      renderTeamMembersList();
+    } else {
+      teamConfigWrap.style.display = 'none';
+    }
+    
+    // 2. 繪製輸入表格
+    renderInputTable();
+    
+    // 3. 填入實際值
+    const monthsCount = getEvaluationMonths();
+    for (let m = 1; m <= monthsCount; m++) {
+      const pData = state.actuals.personal[m];
+      if (pData) {
+        if (document.getElementById(`a-sales-${m}`)) document.getElementById(`a-sales-${m}`).value = pData.sales;
+        if (document.getElementById(`a-dev-${m}`)) document.getElementById(`a-dev-${m}`).value = pData.dev;
+        if (document.getElementById(`a-mach-${m}`)) document.getElementById(`a-mach-${m}`).value = pData.mach;
+      }
+      
+      if (state.role === 'supervisor') {
+        const gData = state.actuals.group[m];
+        if (gData) {
+          if (document.getElementById(`ag-sales-${m}`)) document.getElementById(`ag-sales-${m}`).value = gData.sales;
+          if (document.getElementById(`ag-dev-${m}`)) document.getElementById(`ag-dev-${m}`).value = gData.dev;
+          if (document.getElementById(`ag-mach-${m}`)) document.getElementById(`ag-mach-${m}`).value = gData.mach;
+        }
+      }
+    }
+    
+    // 4. 重新計算一次
+    calculateAppraisal();
+    alert('🎉 成功載入草稿數據！');
+  } catch (e) {
+    console.error('Failed to load draft:', e);
+    alert('載入草稿失敗。');
+  }
+}
+
+// 主任端：一鍵匯入個別組員的績效資料
+function triggerImportMember(memberId) {
+  const fileInput = document.createElement('input');
+  fileInput.type = 'file';
+  fileInput.accept = '.json';
+  fileInput.style.display = 'none';
+  
+  fileInput.onchange = function(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const state = JSON.parse(e.target.result);
+        if (!state.actuals || !state.actuals.personal) {
+          alert('匯入失敗：該檔案不包含有效的個人考核實績數據！');
+          return;
+        }
+        
+        const member = teamMembers.find(m => m.id === memberId);
+        if (member) {
+          member.actuals = state.actuals.personal;
+          
+          if (state.level) {
+            member.level = parseInt(state.level);
+            renderTeamMembersList();
+          }
+          
+          recalculateGroupActuals();
+          alert(`🎉 成功匯入組員績效，並已自動累加計算至小組實際值！`);
+        }
+      } catch (err) {
+        alert('解析檔案失敗，請確認檔案格式是否正確。');
+      }
+    };
+    reader.readAsText(file);
+  };
+  
+  document.body.appendChild(fileInput);
+  fileInput.click();
+  fileInput.remove();
+}
+
+// 主任端：依據個人實際值 + 各個已匯入組員的實際值，自動累加小組的實際值
+function recalculateGroupActuals() {
+  const monthsCount = getEvaluationMonths();
+  for (let m = 1; m <= monthsCount; m++) {
+    const personalSalesVal = document.getElementById(`a-sales-${m}`) ? document.getElementById(`a-sales-${m}`).value : '';
+    const personalDevVal = document.getElementById(`a-dev-${m}`) ? document.getElementById(`a-dev-${m}`).value : '';
+    const personalMachVal = document.getElementById(`a-mach-${m}`) ? document.getElementById(`a-mach-${m}`).value : '';
+
+    let groupSalesSum = personalSalesVal !== '' ? parseFloat(personalSalesVal) : 0;
+    let groupDevSum = personalDevVal !== '' ? parseInt(personalDevVal) : 0;
+    let groupMachSum = personalMachVal !== '' ? parseInt(personalMachVal) : 0;
+    
+    let hasImportedData = personalSalesVal !== '' || personalDevVal !== '' || personalMachVal !== '';
+    
+    teamMembers.forEach(member => {
+      if (member.actuals && member.actuals[m]) {
+        const mSales = member.actuals[m].sales;
+        const mDev = member.actuals[m].dev;
+        const mMach = member.actuals[m].mach;
+        
+        if (mSales !== '') {
+          groupSalesSum += parseFloat(mSales);
+          hasImportedData = true;
+        }
+        if (mDev !== '') {
+          groupDevSum += parseInt(mDev);
+          hasImportedData = true;
+        }
+        if (mMach !== '') {
+          groupMachSum += parseInt(mMach);
+          hasImportedData = true;
+        }
+      }
+    });
+    
+    const gsInput = document.getElementById(`ag-sales-${m}`);
+    const gdInput = document.getElementById(`ag-dev-${m}`);
+    const gmInput = document.getElementById(`ag-mach-${m}`);
+    
+    if (gsInput) {
+      gsInput.value = hasImportedData ? parseFloat(groupSalesSum.toFixed(1)) : '';
+    }
+    if (gdInput) {
+      gdInput.value = hasImportedData ? groupDevSum : '';
+    }
+    if (gmInput) {
+      gmInput.value = hasImportedData ? groupMachSum : '';
+    }
+  }
+  
+  calculateAppraisal();
+}
+
 
 
