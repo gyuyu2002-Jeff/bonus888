@@ -164,6 +164,13 @@ function onAppraisalConfigChange() {
   saveAppState();
 }
 
+// 當官方核定組員編制變更時
+function onHeadcountLimitChange() {
+  saveAppState();
+  renderInputTable();
+}
+
+
 
 
 // 根據考評目的獲取月數
@@ -239,6 +246,20 @@ function renderInputTable() {
           tgNewMach += mTargets.newMach;
         }
       });
+
+      // 缺編把職級一的目標算進去
+      const limitSelect = document.getElementById('supervisor-headcount-limit');
+      const N = limitSelect ? parseInt(limitSelect.value) : 2;
+      const M = teamMembers.length;
+      if (M < N) {
+        const V = N - M;
+        const lvl1Targets = TARGETS_DB[channel]['sales'][1];
+        if (lvl1Targets) {
+          tgSales += V * lvl1Targets.sales;
+          tgNewDev += V * lvl1Targets.newDev;
+          tgNewMach += V * lvl1Targets.newMach;
+        }
+      }
     }
 
     let rowHtml = `
@@ -362,6 +383,20 @@ function updatePassConditions() {
         gMonthlyMach += mTargets.newMach;
       }
     });
+
+    // 缺編把職級一的目標算進去
+    const limitSelect = document.getElementById('supervisor-headcount-limit');
+    const N = limitSelect ? parseInt(limitSelect.value) : 2;
+    const M = teamMembers.length;
+    if (M < N) {
+      const V = N - M;
+      const lvl1Targets = TARGETS_DB[channel]['sales'][1];
+      if (lvl1Targets) {
+        gMonthlySales += V * lvl1Targets.sales;
+        gMonthlyDev += V * lvl1Targets.newDev;
+        gMonthlyMach += V * lvl1Targets.newMach;
+      }
+    }
   }
   const tgSales = gMonthlySales * activeMonths;
   const tgDev = gMonthlyDev * activeMonths;
@@ -1382,6 +1417,9 @@ function collectAppState() {
     }
   }
 
+  const headcountLimitInput = document.getElementById('supervisor-headcount-limit');
+  const headcountLimit = headcountLimitInput ? parseInt(headcountLimitInput.value) : 2;
+
   return {
     channel,
     role,
@@ -1389,6 +1427,7 @@ function collectAppState() {
     mode,
     probationFirstMonthZero,
     teamMembers,
+    headcountLimit,
     actuals
   };
 }
@@ -1457,6 +1496,10 @@ function loadAppState() {
     const teamConfigWrap = document.getElementById('supervisor-team-config-wrap');
     if (state.role === 'supervisor') {
       teamConfigWrap.style.display = 'block';
+      const headcountLimitSelect = document.getElementById('supervisor-headcount-limit');
+      if (headcountLimitSelect && state.headcountLimit !== undefined) {
+        headcountLimitSelect.value = state.headcountLimit;
+      }
       renderTeamMembersList();
     } else {
       teamConfigWrap.style.display = 'none';
